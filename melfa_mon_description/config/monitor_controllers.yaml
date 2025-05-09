@@ -1,0 +1,130 @@
+#    COPYRIGHT (C) 2025 Mitsubishi Electric Corporation
+
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+
+#        http://www.apache.org/licenses/LICENSE-2.0
+
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+controller_manager:
+  ros__parameters:
+    update_rate: 286  #Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    io_mon_controller:
+      type: melfa_mon_controllers/MelfaMonController
+
+
+joint_state_broadcaster:
+  ros__parameters:
+    state_interfaces:
+      - position
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+      - joint_4
+      - joint_5
+      - joint_6
+      - joint_7
+      - joint_8
+
+    state_publish_rate: 286.0 # Defaults to 50
+    action_monitor_rate: 20.0 # Defaults to 20
+
+io_mon_controller:
+  ros__parameters:
+    general1_io_state_interfaces:
+      - general1_io/input_addrr
+      - general1_io/output_addrr
+      - general1_io/input_data
+      - general1_io/output_data
+    general2_io_state_interfaces:
+      - general2_io/input_addrr
+      - general2_io/output_addrr
+      - general2_io/input_data
+      - general2_io/output_data
+    user1_io_state_interfaces:
+      - user1_io/input_addrr
+      - user1_io/output_addrr
+      - user1_io/input_data
+      - user1_io/output_data
+    user2_io_state_interfaces:
+      - user2_io/input_addrr
+      - user2_io/output_addrr
+      - user2_io/input_data
+      - user2_io/output_data
+    user3_io_state_interfaces:
+      - user3_io/input_addrr
+      - user3_io/output_addrr
+      - user3_io/input_data
+      - user3_io/output_data
+    user4_io_state_interfaces:
+      - user4_io/input_addrr
+      - user4_io/output_addrr
+      - user4_io/input_data
+      - user4_io/output_data
+    user5_io_state_interfaces:
+      - user5_io/input_addrr
+      - user5_io/output_addrr
+      - user5_io/input_data
+      - user5_io/output_data
+    user6_io_state_interfaces:
+      - user6_io/input_addrr
+      - user6_io/output_addrr
+      - user6_io/input_data
+      - user6_io/output_data
+    user7_io_state_interfaces:
+      - user7_io/input_addrr
+      - user7_io/output_addrr
+      - user7_io/input_data
+      - user7_io/output_data
+    user8_io_state_interfaces:
+      - user8_io/input_addrr
+      - user8_io/output_addrr
+      - user8_io/input_data
+      - user8_io/output_data
+    misc_io_state_interfaces:
+      - io_control_mode/io_mode
+      - ctrl/ctrl_type
+    general1_io_command_interfaces:
+      - general1_io/input_addrr
+      - general1_io/output_addrr
+    general2_io_command_interfaces:
+      - general2_io/input_addrr
+      - general2_io/output_addrr
+    user1_io_command_interfaces:
+      - user1_io/input_addrr
+      - user1_io/output_addrr
+    user2_io_command_interfaces:
+      - user2_io/input_addrr
+      - user2_io/output_addrr
+    user3_io_command_interfaces:
+      - user3_io/input_addrr
+      - user3_io/output_addrr
+    user4_io_command_interfaces:
+      - user4_io/input_addrr
+      - user4_io/output_addrr
+    user5_io_command_interfaces:
+      - user5_io/input_addrr
+      - user5_io/output_addrr
+    user6_io_command_interfaces:
+      - user6_io/input_addrr
+      - user6_io/output_addrr
+    user7_io_command_interfaces:
+      - user7_io/input_addrr
+      - user7_io/output_addrr
+    user8_io_command_interfaces:
+      - user8_io/input_addrr
+      - user8_io/output_addrr
+    misc_io_command_interfaces:
+      - io_control_mode/io_mode
+      - ctrl/ctrl_type

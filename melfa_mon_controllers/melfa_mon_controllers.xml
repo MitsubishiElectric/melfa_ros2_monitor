@@ -1,0 +1,9 @@
+<library path="melfa_mon_controllers">
+    <class name="melfa_mon_controllers/MelfaMonController"
+            type="melfa_mon_controllers::MelfaMonController"
+            base_class_type="controller_interface::ControllerInterface">
+        <description>
+            Controller plugin for MELFA Input Output Monitoring.
+        </description>
+    </class>
+</library>

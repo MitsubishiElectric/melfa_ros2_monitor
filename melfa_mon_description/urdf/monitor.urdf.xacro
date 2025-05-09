@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rc1">
+
+    <!-- Enable setting arguments from the launch file -->
+    <xacro:arg name="prefix" default="" />
+    <xacro:arg name="robot_ip" default="192.168.0.20" />
+    <xacro:arg name="send_port" default="12000" />
+    <xacro:arg name="recv_port" default="12001" />
+    <xacro:arg name="controller_type" default="R" />
+    <xacro:arg name="controller_config" default="custom_monitor_params.yaml" />
+    <xacro:arg name="packet_lost_log" default="1" />
+
+    <!-- Import urdf file -->
+    <!-- <xacro:include filename="$(find melfa_mon_description)/urdf/rv7frl/rv7frl_macro.xacro" /> -->
+    <!-- Import ros2_control description -->
+    <xacro:include filename="$(find melfa_mon_description)/ros2_control/monitor.hardware.xacro" />
+
+    <!-- Use world link to fix robot -->
+    <!-- <link name="$(arg prefix)world"/>
+    <xacro:rv7frl parent="$(arg prefix)world" prefix="$(arg prefix)">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </xacro:rv7frl> -->
+    <xacro:monitor_hardware
+        name="rc1" 
+        prefix="$(arg prefix)" 
+        robot_ip="$(arg robot_ip)" 
+        send_port="$(arg send_port)"
+        recv_port="$(arg recv_port)"
+        controller_config="$(arg controller_config)"
+        controller_type="$(arg controller_type)"
+        packet_lost_log="$(arg packet_lost_log)"
+        />
+
+</robot>
