@@ -22,11 +22,37 @@ controller_manager:
     io_mon_controller:
       type: melfa_mon_controllers/MelfaMonController
 
+    fts_raw_broadcaster:
+      type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
+
+    fts_before_offset_broadcaster:
+      type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
+
+    fts_after_offset_broadcaster:
+      type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
+
+fts_raw_broadcaster:
+  ros__parameters:
+      sensor_name: fts_raw_sensor
+      frame_id: default_tcp
+
+
+fts_before_offset_broadcaster:
+  ros__parameters:
+      sensor_name: fts_before_offset_sensor
+      frame_id: default_tcp
+
+fts_after_offset_broadcaster:
+  ros__parameters:
+    sensor_name: fts_after_offset_sensor
+    frame_id: default_tcp
 
 joint_state_broadcaster:
   ros__parameters:
     state_interfaces:
       - position
+      - velocity
+      - effort
     joints:
       - joint_1
       - joint_2
@@ -39,6 +65,7 @@ joint_state_broadcaster:
 
     state_publish_rate: 286.0 # Defaults to 50
     action_monitor_rate: 20.0 # Defaults to 20
+
 
 io_mon_controller:
   ros__parameters:

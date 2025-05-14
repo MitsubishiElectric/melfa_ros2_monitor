@@ -187,13 +187,37 @@ def generate_launch_description():
     #     package='robot_state_publisher',
     #     executable='robot_state_publisher',
     #     output='both',
-    #     parameters=[robot_description],
+    #     parameters=["~/robot_description"],
     # )
 
     joint_state_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['joint_state_broadcaster', '--controller-manager', controller_manager_name],
+    )
+
+    pose_state_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_state_broadcaster', '--controller-manager', controller_manager_name],
+    )
+
+    fts_raw_broadcaster_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['fts_raw_broadcaster', '--controller-manager', controller_manager_name],
+    )
+
+    fts_before_offset_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['fts_before_offset_broadcaster', '--controller-manager', controller_manager_name],
+    )
+
+    fts_after_offset_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['fts_after_offset_broadcaster', '--controller-manager', controller_manager_name],
     )
 
     # robot_controller_spawner = Node(
@@ -220,7 +244,11 @@ def generate_launch_description():
         control_node,
         # robot_state_pub_node,
         joint_state_broadcaster_spawner,
+        # pose_state_broadcaster_spawner,
         gpio_controller_spawner,
+        fts_raw_broadcaster_broadcaster_spawner,
+        fts_before_offset_broadcaster_spawner,
+        fts_after_offset_broadcaster_spawner
         # delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
 

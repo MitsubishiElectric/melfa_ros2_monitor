@@ -92,9 +92,9 @@ control_mode_io:
 # 1014| RMS current [Arms]
 
 data_queue:
-  data_1_queue: 8
-  data_2_queue: 15
-  data_3_queue: 1, 2, 3, 4
-  data_4_queue: 1, 2, 3, 4
+  data_1_queue: 101, 8, 7
+  data_2_queue: 102, 15, 13
+  data_3_queue: 103, 1011, 104
+  data_4_queue: 0, 1, 2, 3
 
 

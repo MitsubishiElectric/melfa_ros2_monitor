@@ -16,6 +16,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/GpioCommand.msg"
   "msg/ControllerType.msg"
   "msg/ControlMode.msg"
+  "msg/RobotInfo.msg"
  )
 
 if(BUILD_TESTING)

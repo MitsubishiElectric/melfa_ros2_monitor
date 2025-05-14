@@ -18,6 +18,7 @@
 // Include headers for ROS 2 control hardware_interface
 #include "hardware_interface/hardware_info.hpp"                         // Declaration related to hardware information
 #include "hardware_interface/system_interface.hpp"                      // Declaration related to system interfaces
+#include "hardware_interface/sensor_interface.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"  // Declaration related to type values of hardware interfaces
 
 // Include headers for MELFA
@@ -89,7 +90,11 @@ private:
 
   // State Interfaces
   std::vector<double> joint_position_states_;
-  std::vector<double> force_torque_states_;
+  std::vector<double> joint_velocity_states_;
+  std::vector<double> joint_effort_states_;
+  std::vector<double> fts_raw_states_;
+  std::vector<double> fts_before_states_;
+  std::vector<double> fts_after_states_;
 
   // General 1 Interfaces
   std::string general1_io_name = "general1_io";

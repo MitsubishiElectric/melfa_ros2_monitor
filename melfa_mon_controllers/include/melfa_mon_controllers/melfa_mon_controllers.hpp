@@ -25,6 +25,7 @@
 
 #include "melfa_mon_msgs/msg/gpio_state.hpp"
 #include "melfa_mon_msgs/msg/gpio_command.hpp"
+#include "melfa_mon_msgs/msg/robot_info.hpp"
 #include "melfa_mon_msgs/msg/control_mode.hpp"
 #include "melfa_mon_msgs/msg/controller_type.hpp"
 #include "std_msgs/msg/string.hpp"

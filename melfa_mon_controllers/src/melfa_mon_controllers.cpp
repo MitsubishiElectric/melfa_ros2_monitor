@@ -252,21 +252,21 @@ controller_interface::CallbackReturn MelfaMonController::on_configure(const rclc
         get_node()->create_publisher<melfa_mon_msgs::msg::GpioState>("~/user7_io_state", rclcpp::SystemDefaultsQoS());
     user8_io_state_publisher_ =
         get_node()->create_publisher<melfa_mon_msgs::msg::GpioState>("~/user8_io_state", rclcpp::SystemDefaultsQoS());
-    controller_type_publisher_ =
-        get_node()->create_publisher<melfa_mon_msgs::msg::ControllerType>("~/controller_type", rclcpp::SystemDefaultsQoS());
+    controller_type_publisher_ = get_node()->create_publisher<melfa_mon_msgs::msg::ControllerType>(
+        "~/controller_type", rclcpp::SystemDefaultsQoS());
     control_mode_publisher_ = get_node()->create_publisher<melfa_mon_msgs::msg::ControlMode>(
-        "~/io_control_mode", rclcpp::SystemDefaultsQoS());
+        "~/io_monitor_mode", rclcpp::SystemDefaultsQoS());
 
     io_mon_command_subscriber_ = get_node()->create_subscription<melfa_mon_msgs::msg::GpioCommand>(
-        "~/io_mon_command", rclcpp::SystemDefaultsQoS(),
+        "~/io_monitor_address_command", rclcpp::SystemDefaultsQoS(),
         [this](const melfa_mon_msgs::msg::GpioCommand::SharedPtr gpio_msg) { commandGPIOCallback(gpio_msg); });
 
     configure_io_mon_srv_ = get_node()->create_service<melfa_mon_msgs::srv::GpioConfigure>(
-        "~/configure_io_mon",
+        "~/configure_io_monitor_address",
         std::bind(&MelfaMonController::configGpio, this, std::placeholders::_1, std::placeholders::_2));
 
     configure_mon_mode_srv_ = get_node()->create_service<melfa_mon_msgs::srv::ModeConfigure>(
-        "~/configure_io_mon_mode",
+        "~/configure_io_monitor_mode",
         std::bind(&MelfaMonController::configControlMode, this, std::placeholders::_1, std::placeholders::_2));
   }
   catch (...)
@@ -375,7 +375,7 @@ void MelfaMonController::commandGPIOCallback(const melfa_mon_msgs::msg::GpioComm
   if ((io_cmd_->input_addrr >= ctrl_limits[0] && io_cmd_->input_addrr <= ctrl_limits[1]) &&
       (io_cmd_->output_addrr >= ctrl_limits[0] && io_cmd_->output_addrr <= ctrl_limits[1]))
   {
-    commandGPIO(GpioIdentifier::general2_io_command);
+    commandGPIO(GpioIdentifier::general1_io_command);
   }
   else if ((io_cmd_->input_addrr >= ctrl_limits[2] && io_cmd_->input_addrr <= ctrl_limits[3]) &&
            (io_cmd_->output_addrr >= ctrl_limits[2] && io_cmd_->output_addrr <= ctrl_limits[3]))
