@@ -13,6 +13,7 @@
   <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>melfa_mon_msgs</depend>
   <depend>ros2_control</depend>
   <depend>ros2_controllers</depend>
   <depend>generate_parameter_library</depend>

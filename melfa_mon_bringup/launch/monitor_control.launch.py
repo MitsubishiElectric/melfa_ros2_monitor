@@ -183,20 +183,7 @@ def generate_launch_description():
 
     )
 
-    # robot_state_pub_node = Node(
-    #     package='robot_state_publisher',
-    #     executable='robot_state_publisher',
-    #     output='both',
-    #     parameters=["~/robot_description"],
-    # )
-
     joint_state_broadcaster_spawner = Node(
-        package='controller_manager',
-        executable='spawner',
-        arguments=['joint_state_broadcaster', '--controller-manager', controller_manager_name],
-    )
-
-    pose_state_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['joint_state_broadcaster', '--controller-manager', controller_manager_name],
@@ -220,36 +207,19 @@ def generate_launch_description():
         arguments=['fts_after_offset_broadcaster', '--controller-manager', controller_manager_name],
     )
 
-    # robot_controller_spawner = Node(
-    #     package='controller_manager',
-    #     executable='spawner',
-    #     arguments=[robot_controller, '-c', controller_manager_name],
-    # )
-
     gpio_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["io_mon_controller", "-c", controller_manager_name],
     )
 
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    # delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=joint_state_broadcaster_spawner,
-    #         on_exit=[robot_controller_spawner],
-    #     )
-    # )
-
     nodes = [
         control_node,
-        # robot_state_pub_node,
         joint_state_broadcaster_spawner,
-        # pose_state_broadcaster_spawner,
         gpio_controller_spawner,
         fts_raw_broadcaster_broadcaster_spawner,
         fts_before_offset_broadcaster_spawner,
         fts_after_offset_broadcaster_spawner
-        # delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
 
     return LaunchDescription(declared_arguments + nodes)

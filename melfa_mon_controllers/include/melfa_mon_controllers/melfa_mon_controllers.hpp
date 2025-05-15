@@ -92,17 +92,6 @@ public:
   MELFA_MON_CONTROLLERS_PUBLIC
   CallbackReturn on_init() override;
 
-  const std::array<uint16_t, 3> general1_io_mode_{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> general2_io_mode_{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> user1_io_mode{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> user2_io_mode{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> user3_io_mode{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> user4_io_mode{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> user5_io_mode{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> user6_io_mode{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> user7_io_mode{ 0xFFFF, 0x0, 0X0 };
-  const std::array<uint16_t, 3> user8_io_mode{ 0xFFFF, 0x0, 0X0 };
-
 private:
   std::vector<std::string> general1_io_state_interfaces_;
   std::vector<std::string> general2_io_state_interfaces_;

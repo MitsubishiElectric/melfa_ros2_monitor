@@ -21,7 +21,7 @@ controller_interface::CallbackReturn MelfaMonController::on_init()
   /**
    * @brief on_init method for MelfaMonController class
    *
-   * This method intiailizes the limits of the IO interfaces by reading from the IO limits YAML config file
+   * This method initializes the limits of the IO interfaces by reading from the IO limits YAML config file
    *
    * @returns CallbackReturn::SUCCESS if IO limits components are loading in YAML node
    * @returns CallbackReturn::ERROR if exception is raised
@@ -31,10 +31,8 @@ controller_interface::CallbackReturn MelfaMonController::on_init()
   try
   {
     const std::string package_name = "melfa_mon_controllers";
-    // const std::string package_name = "melfa_mon_description";
-    std::string confg_file = "io_limits.yaml";
-    // std::string confg_file = "custom_monitor_params.yaml";
-    std::string yamlFilePath = ament_index_cpp::get_package_share_directory(package_name) + "/config/" + confg_file;
+    std::string config_file = "io_limits.yaml";
+    std::string yamlFilePath = ament_index_cpp::get_package_share_directory(package_name) + "/config/" + config_file;
 
     // Load the YAML file
     io_limits_ = YAML::LoadFile(yamlFilePath);
@@ -117,7 +115,7 @@ controller_interface::return_type MelfaMonController::update(const rclcpp::Time&
    * @param time The time recorded at the beginning of the current iteration of the update loop
    * @param period The duration measured for the last iteration of the update loop
    * @returns Controller_interface::return_type::OK after update of the states
-   * @note updateGPIO function faciliates updating different IO interfaces current state
+   * @note updateGPIO function facilitates updating different IO interfaces current state
    *
    */
 
@@ -349,8 +347,8 @@ bool MelfaMonController::configGpio(melfa_mon_msgs::srv::GpioConfigure::Request:
   else
   {
     RCLCPP_WARN(get_node()->get_logger(),
-                "configure_gpio service: INVALID I/O Address (%d) (%d) or INVALID MODE REQUEST. "
-                "Please select Bit Top within acceptable range of IO interfaces (or) ",
+                "configure_gpio service: INVALID ADDRESS (%d) (%d)"
+                "Please select memory addresses that are within acceptable range of the SAME interface",
                 req->input_addrr, req->output_addrr);
   }
 
@@ -425,9 +423,8 @@ void MelfaMonController::commandGPIOCallback(const melfa_mon_msgs::msg::GpioComm
   else
   {
     RCLCPP_WARN(get_node()->get_logger(),
-                "configure_gpio service: INVALID BIT TOP (%d) (%d) or INVALID MODE REQUEST. "
-                "Please select Bit Top within acceptable range of IO interfaces (or) "
-                "Please select one of the following modes: WRITE_OUT, READ_OUT, READ_IN.",
+                "command GPIO Callback: INVALID ADDRESS (%d) (%d)"
+                "Please select memory addresses that are within acceptable range of the SAME interface",
                 io_cmd_->input_addrr, io_cmd_->output_addrr);
   }
 }
@@ -474,10 +471,14 @@ controller_interface::CallbackReturn MelfaMonController::on_activate(const rclcp
    */
   if (state_interfaces_.at(GpioIdentifier::ctrl_type_state).get_value() == 1.0)
     ctrl_limits = io_limits_["R"].as<std::vector<long int>>();
-  if (state_interfaces_.at(GpioIdentifier::ctrl_type_state).get_value() == 2.0)
+  else if (state_interfaces_.at(GpioIdentifier::ctrl_type_state).get_value() == 2.0)
     ctrl_limits = io_limits_["Q"].as<std::vector<long int>>();
-  if (state_interfaces_.at(GpioIdentifier::ctrl_type_state).get_value() == 3.0)
+  else if (state_interfaces_.at(GpioIdentifier::ctrl_type_state).get_value() == 3.0)
     ctrl_limits = io_limits_["D"].as<std::vector<long int>>();
+  else
+    RCLCPP_WARN(get_node()->get_logger(), "Controller Type not recognized. %s: %f.",
+                state_interfaces_.at(GpioIdentifier::ctrl_type_state).get_name().c_str(),
+                state_interfaces_.at(GpioIdentifier::ctrl_type_state).get_value());
 
   return LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }

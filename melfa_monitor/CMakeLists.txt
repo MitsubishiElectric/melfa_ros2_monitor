@@ -19,15 +19,6 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(generate_parameter_library REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
 
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
-
-# generate_parameter_library(
-#   custom_io_params # cmake target name for the parameter library
-#   src/custom_io_params.yaml # path to input yaml file
-# )
-
 
 include_directories(include)
 
@@ -42,9 +33,7 @@ target_include_directories(
   PRIVATE
   include
 )
-# target_link_libraries(${PROJECT_NAME}
-#   custom_io_params
-# )
+
 ament_target_dependencies(
   ${PROJECT_NAME}
   hardware_interface

@@ -22,9 +22,9 @@ std::vector<uint16_t> MELFAMonitorHardwareInterface::readDataQueue(const std::st
   /**
    * @brief Reads configured IO Limit parameters
    *
-   * This function reads the IO limit strings from hardware parmater and generates it as a vector
+   * This function reads the IO limit strings from hardware parameter and generates it as a vector
    *
-   * @param limit_string A string with IO limits seperated by delimiter (,)
+   * @param limit_string A string with IO limits separated by delimiter (,)
    * @return The delimited values as a vector
    *
    * @note The function can delimit and vectorize any number of values
@@ -32,11 +32,11 @@ std::vector<uint16_t> MELFAMonitorHardwareInterface::readDataQueue(const std::st
 
   std::vector<uint16_t> result;
   std::istringstream ss(limit_string);
-  std::string delimted_value;
+  std::string delimited_value;
 
-  while (std::getline(ss, delimted_value, ','))
+  while (std::getline(ss, delimited_value, ','))
   {
-    result.push_back(static_cast<uint16_t>(std::stoi(delimted_value)));
+    result.push_back(static_cast<uint16_t>(std::stoi(delimited_value)));
   }
   return result;
 }
@@ -44,7 +44,7 @@ std::vector<uint16_t> MELFAMonitorHardwareInterface::readDataQueue(const std::st
 void MELFAMonitorHardwareInterface::setIO(const std::vector<double>& io_commands)
 {
   /**
-   * @brief Sets IO paramters for the MELFA API
+   * @brief Sets IO parameters for the MELFA API
    *
    * This function sets required IO parameters for the command packet sent to the API
    *
@@ -78,7 +78,7 @@ MELFAMonitorHardwareInterface::on_init(const hardware_interface::HardwareInfo& s
   info_ = system_info;
   execution_init_ = true;
 
-  // Reading IO limits from harware info structure for specific IO interfaces
+  // Reading IO limits from hardware info structure for specific IO interfaces
   general1_io_limits_ = readDataQueue(info_.hardware_parameters["general1_io_limits"]);
   general2_io_limits_ = readDataQueue(info_.hardware_parameters["general2_io_limits"]);
   user1_io_limits_ = readDataQueue(info_.hardware_parameters["user1_io_limits"]);
@@ -104,8 +104,9 @@ MELFAMonitorHardwareInterface::on_init(const hardware_interface::HardwareInfo& s
   // Reading user defined IO binary control mode and MELFA Controller type
   io_control_mode_ = info_.hardware_parameters["io_control_mode"];
   controller_type_ = info_.hardware_parameters["controller_type"];
+  RCLCPP_INFO(rclcpp::get_logger("MELFAMonitorHardwareInterface"),"CONTROLLER TYPE: %s.",controller_type_.c_str());
 
-  // Joint position commmands and states initiailization
+  // Joint position commands and states initialization
   joint_position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   joint_velocity_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   joint_effort_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
@@ -335,15 +336,15 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
   user8_io_commands_[0] = user8_io_limits_[0];
   user8_io_commands_[1] = user8_io_limits_[0];
 
-  // Intialization of Controller type command
+  // Initialization of Controller type command
   if (controller_type_ == "R")
-    ctrl_type_io_command_[0] = 1.0;
+    ctrl_type_io_state_[0] = 1.0;
   if (controller_type_ == "Q")
-    ctrl_type_io_command_[0] = 2.0;
+    ctrl_type_io_state_[0] = 2.0;
   if (controller_type_ == "D")
-    ctrl_type_io_command_[0] = 3.0;
+    ctrl_type_io_state_[0] = 3.0;
 
-  // Intialization of Controller type command
+  // Initialization of Controller type command
 
   mode_io_command_[0] = std::bitset<10>(io_control_mode_).to_ulong();
 
@@ -359,7 +360,7 @@ MELFAMonitorHardwareInterface::on_deactivate(const rclcpp_lifecycle::State& prev
   /**
    * @brief Deactivation method for MELFAMonitorHardwareInterface class
    *
-   * This function sends stopping signal to the MELFA Controlller API
+   * This function sends stopping signal to the MELFA Controller API
    *
    * @param previous_state lifecycle state object representing state before current state
    * @returns CallbackReturn::SUCCESS if deactivation condition is met
@@ -580,7 +581,7 @@ hardware_interface::return_type MELFAMonitorHardwareInterface::read(const rclcpp
    * @param time The time recorded at the beginning of the current iteration of the control loop
    * @param period The duration measured for the last iteration of the control loop.
    * @returns hardware_interface::return_type::OK after interfaces are read
-   * @note readIOFeedback function faciliates reading different IO state interfaces
+   * @note readIOFeedback function facilitates reading different IO state interfaces
    *
    */
 
