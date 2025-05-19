@@ -16,8 +16,8 @@
 #define MELFA_MONITOR__HARDWARE_INTERFACE_HPP_
 
 // Include headers for ROS 2 control hardware_interface
-#include "hardware_interface/hardware_info.hpp"                         // Declaration related to hardware information
-#include "hardware_interface/system_interface.hpp"                      // Declaration related to system interfaces
+#include "hardware_interface/hardware_info.hpp"     // Declaration related to hardware information
+#include "hardware_interface/system_interface.hpp"  // Declaration related to system interfaces
 #include "hardware_interface/sensor_interface.hpp"
 #include "hardware_interface/types/hardware_interface_type_values.hpp"  // Declaration related to type values of hardware interfaces
 
@@ -84,6 +84,10 @@ private:
   // communication API
   std::unique_ptr<MelfaEthernet::rtmon> api_wrap_;
   uint8_t packet_lost_log;
+  uint8_t joint_broadcaster_toggle;
+  uint8_t fts_curr_broadcaster_toggle;
+  uint8_t fts_after_broadcaster_toggle;
+  uint8_t fts_before_broadcaster_toggle;
 
   bool execution_init_;
   unsigned int binary_config_;
@@ -92,7 +96,7 @@ private:
   std::vector<double> joint_position_states_;
   std::vector<double> joint_velocity_states_;
   std::vector<double> joint_effort_states_;
-  std::vector<double> fts_raw_states_;
+  std::vector<double> fts_curr_states_;
   std::vector<double> fts_before_states_;
   std::vector<double> fts_after_states_;
 

@@ -9,17 +9,11 @@
     <xacro:arg name="controller_type" default="" />
     <xacro:arg name="controller_config" default="custom_monitor_params.yaml" />
     <xacro:arg name="packet_lost_log" default="1" />
+    <xacro:arg name="joint_broadcaster" default="true" />
 
-    <!-- Import urdf file -->
-    <!-- <xacro:include filename="$(find melfa_mon_description)/urdf/rv7frl/rv7frl_macro.xacro" /> -->
     <!-- Import ros2_control description -->
     <xacro:include filename="$(find melfa_mon_description)/ros2_control/monitor.hardware.xacro" />
 
-    <!-- Use world link to fix robot -->
-    <!-- <link name="$(arg prefix)world"/>
-    <xacro:rv7frl parent="$(arg prefix)world" prefix="$(arg prefix)">
-        <origin xyz="0 0 0" rpy="0 0 0" />
-    </xacro:rv7frl> -->
     <xacro:monitor_hardware
         name="rc1" 
         prefix="$(arg prefix)" 
@@ -29,6 +23,7 @@
         controller_config="$(arg controller_config)"
         controller_type="$(arg controller_type)"
         packet_lost_log="$(arg packet_lost_log)"
+        joint_broadcaster="$(arg joint_broadcaster)"
         />
 
 </robot>

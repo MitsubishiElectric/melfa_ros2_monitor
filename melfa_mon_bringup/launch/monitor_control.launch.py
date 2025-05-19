@@ -1,4 +1,4 @@
-#    COPYRIGHT (C) 2024 Mitsubishi Electric Corporation
+#    COPYRIGHT (C) 2025 Mitsubishi Electric Corporation
 
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -12,18 +12,13 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-import os
-from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler, ExecuteProcess, IncludeLaunchDescription
-from launch.conditions import IfCondition, UnlessCondition
-from launch.event_handlers import OnProcessExit
+from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-from launch.event_handlers import OnProcessStart
 from launch_ros.parameter_descriptions import ParameterFile
 
 def generate_launch_description():
@@ -69,13 +64,6 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            'robot_controller',
-            default_value='joint_trajectory_controller',
-            description='Robot controller to start.',
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
             'robot_ip',
             default_value='192.168.0.20',
             description='Robot IP.',
@@ -116,14 +104,20 @@ def generate_launch_description():
             description='Enable/disable packet lost warning. DO NOTE DISABLE WHEN USING A REAL ROBOT.',
         )
     )
-    
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'joint_broadcaster',
+            default_value='true',
+            description='Toggle joint_state_broadcaster',
+        )
+    )
     # Initialize Arguments
     runtime_config_package = LaunchConfiguration('runtime_config_package')
     controllers_file = LaunchConfiguration('controllers_file')
     description_package = LaunchConfiguration('description_package')
     description_file = LaunchConfiguration('description_file')
     controller_manager_name = LaunchConfiguration("controller_manager_name")
-    robot_controller = LaunchConfiguration('robot_controller')
+    joint_broadcaster = LaunchConfiguration('joint_broadcaster')
     robot_ip = LaunchConfiguration('robot_ip')
     send_port = LaunchConfiguration('send_port')
     recv_port = LaunchConfiguration('recv_port')
@@ -168,6 +162,9 @@ def generate_launch_description():
             ' ',
             "packet_lost_log:=",
             packet_lost_log,
+            ' ',
+            "joint_broadcaster:=",
+            joint_broadcaster,
         ]
     )
     robot_description = {'robot_description': robot_description_content}
@@ -183,16 +180,17 @@ def generate_launch_description():
 
     )
 
-    joint_state_broadcaster_spawner = Node(
+    joint_monitor_state_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['joint_state_broadcaster', '--controller-manager', controller_manager_name],
+        condition=IfCondition(joint_broadcaster)
     )
 
-    fts_raw_broadcaster_broadcaster_spawner = Node(
+    fts_curr_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['fts_raw_broadcaster', '--controller-manager', controller_manager_name],
+        arguments=['fts_curr_broadcaster', '--controller-manager', controller_manager_name],
     )
 
     fts_before_offset_broadcaster_spawner = Node(
@@ -215,9 +213,9 @@ def generate_launch_description():
 
     nodes = [
         control_node,
-        joint_state_broadcaster_spawner,
+        joint_monitor_state_broadcaster_spawner,
         gpio_controller_spawner,
-        fts_raw_broadcaster_broadcaster_spawner,
+        fts_curr_broadcaster_spawner,
         fts_before_offset_broadcaster_spawner,
         fts_after_offset_broadcaster_spawner
     ]

@@ -101,21 +101,32 @@ MELFAMonitorHardwareInterface::on_init(const hardware_interface::HardwareInfo& s
   dat3_count_ = 0;
   dat4_count_ = 0;
 
+  // joint_broadcaster_toggle = stoi(info_.hardware_parameters["joint_broadcaster"]);
+  if (info_.hardware_parameters["joint_broadcaster"] == "False")
+    joint_broadcaster_toggle = 0;
+  else
+    joint_broadcaster_toggle = 1;
+
   // Reading user defined IO binary control mode and MELFA Controller type
   io_control_mode_ = info_.hardware_parameters["io_control_mode"];
   controller_type_ = info_.hardware_parameters["controller_type"];
-  RCLCPP_INFO(rclcpp::get_logger("MELFAMonitorHardwareInterface"),"CONTROLLER TYPE: %s.",controller_type_.c_str());
+  RCLCPP_INFO(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "CONTROLLER TYPE: %s.", controller_type_.c_str());
 
   // Joint position commands and states initialization
-  joint_position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  joint_velocity_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-  joint_effort_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  if (joint_broadcaster_toggle != 0)
+  {
+    joint_position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+    joint_velocity_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+    joint_effort_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+  }
+  if (fts_curr_broadcaster_toggle != 0)
+    fts_curr_states_.resize(info_.sensors[0].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
 
-  fts_raw_states_.resize(info_.sensors[0].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
+  if (fts_before_broadcaster_toggle != 0)
+    fts_before_states_.resize(info_.sensors[1].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
 
-  fts_before_states_.resize(info_.sensors[1].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
-
-  fts_after_states_.resize(info_.sensors[2].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
+  if (fts_after_broadcaster_toggle != 0)
+    fts_after_states_.resize(info_.sensors[2].state_interfaces.size(), std::numeric_limits<double>::quiet_NaN());
 
   // Joint state and command interface validation
   for (const hardware_interface::ComponentInfo& joint : info_.joints)
@@ -131,24 +142,24 @@ MELFAMonitorHardwareInterface::on_init(const hardware_interface::HardwareInfo& s
     if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
     {
       RCLCPP_FATAL(rclcpp::get_logger("MELFAMonitorHardwareInterface"),
-                   "Joint '%s' have %s position state interface as first state interface. '%s' expected.", joint.name.c_str(),
-                   joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
+                   "Joint '%s' have %s position state interface as first state interface. '%s' expected.",
+                   joint.name.c_str(), joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
       return hardware_interface::CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces[1].name != hardware_interface::HW_IF_VELOCITY)
     {
       RCLCPP_FATAL(rclcpp::get_logger("MELFAMonitorHardwareInterface"),
-                   "Joint '%s' have %s velocity state interface as first state interface. '%s' expected.", joint.name.c_str(),
-                   joint.state_interfaces[1].name.c_str(), hardware_interface::HW_IF_POSITION);
+                   "Joint '%s' have %s velocity state interface as first state interface. '%s' expected.",
+                   joint.name.c_str(), joint.state_interfaces[1].name.c_str(), hardware_interface::HW_IF_POSITION);
       return hardware_interface::CallbackReturn::ERROR;
     }
 
     if (joint.state_interfaces[2].name != hardware_interface::HW_IF_EFFORT)
     {
       RCLCPP_FATAL(rclcpp::get_logger("MELFAMonitorHardwareInterface"),
-                   "Joint '%s' have %s effort state interface as first state interface. '%s' expected.", joint.name.c_str(),
-                   joint.state_interfaces[2].name.c_str(), hardware_interface::HW_IF_POSITION);
+                   "Joint '%s' have %s effort state interface as first state interface. '%s' expected.",
+                   joint.name.c_str(), joint.state_interfaces[2].name.c_str(), hardware_interface::HW_IF_POSITION);
       return hardware_interface::CallbackReturn::ERROR;
     }
   }
@@ -256,40 +267,44 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
   RCLCPP_INFO(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "System successfully started!");
 
   // Reads joint state from rtmon API feedback packet
-  joint_position_states_[0] = api_wrap_->fb_pack.jnt_EFB.j1;
-  joint_position_states_[1] = api_wrap_->fb_pack.jnt_EFB.j2;
-  joint_position_states_[2] = api_wrap_->fb_pack.jnt_EFB.j3;
-  joint_position_states_[3] = api_wrap_->fb_pack.jnt_EFB.j4;
-  joint_position_states_[4] = api_wrap_->fb_pack.jnt_EFB.j5;
-  joint_position_states_[5] = api_wrap_->fb_pack.jnt_EFB.j6;
-  joint_position_states_[6] = api_wrap_->fb_pack.jnt_EFB.j7;
-  joint_position_states_[7] = api_wrap_->fb_pack.jnt_EFB.j8;
+  if (joint_broadcaster_toggle != 0)
+  {
+    joint_position_states_[0] = api_wrap_->fb_pack.jnt_EFB.j1;
+    joint_position_states_[1] = api_wrap_->fb_pack.jnt_EFB.j2;
+    joint_position_states_[2] = api_wrap_->fb_pack.jnt_EFB.j3;
+    joint_position_states_[3] = api_wrap_->fb_pack.jnt_EFB.j4;
+    joint_position_states_[4] = api_wrap_->fb_pack.jnt_EFB.j5;
+    joint_position_states_[5] = api_wrap_->fb_pack.jnt_EFB.j6;
+    joint_position_states_[6] = api_wrap_->fb_pack.jnt_EFB.j7;
+    joint_position_states_[7] = api_wrap_->fb_pack.jnt_EFB.j8;
 
-  joint_velocity_states_[0] = api_wrap_->fb_pack.speed_fb.m1;
-  joint_velocity_states_[1] = api_wrap_->fb_pack.speed_fb.m2;
-  joint_velocity_states_[2] = api_wrap_->fb_pack.speed_fb.m3;
-  joint_velocity_states_[3] = api_wrap_->fb_pack.speed_fb.m4;
-  joint_velocity_states_[4] = api_wrap_->fb_pack.speed_fb.m5;
-  joint_velocity_states_[5] = api_wrap_->fb_pack.speed_fb.m6;
-  joint_velocity_states_[6] = api_wrap_->fb_pack.speed_fb.m7;
-  joint_velocity_states_[7] = api_wrap_->fb_pack.speed_fb.m8;
+    joint_velocity_states_[0] = api_wrap_->fb_pack.speed_fb.m1;
+    joint_velocity_states_[1] = api_wrap_->fb_pack.speed_fb.m2;
+    joint_velocity_states_[2] = api_wrap_->fb_pack.speed_fb.m3;
+    joint_velocity_states_[3] = api_wrap_->fb_pack.speed_fb.m4;
+    joint_velocity_states_[4] = api_wrap_->fb_pack.speed_fb.m5;
+    joint_velocity_states_[5] = api_wrap_->fb_pack.speed_fb.m6;
+    joint_velocity_states_[6] = api_wrap_->fb_pack.speed_fb.m7;
+    joint_velocity_states_[7] = api_wrap_->fb_pack.speed_fb.m8;
 
-  joint_effort_states_[0] = api_wrap_->fb_pack.curr_fb_arms.f1;
-  joint_effort_states_[1] = api_wrap_->fb_pack.curr_fb_arms.f2;
-  joint_effort_states_[2] = api_wrap_->fb_pack.curr_fb_arms.f3;
-  joint_effort_states_[3] = api_wrap_->fb_pack.curr_fb_arms.f4;
-  joint_effort_states_[4] = api_wrap_->fb_pack.curr_fb_arms.f5;
-  joint_effort_states_[5] = api_wrap_->fb_pack.curr_fb_arms.f6;
-  joint_effort_states_[6] = api_wrap_->fb_pack.curr_fb_arms.f7;
-  joint_effort_states_[7] = api_wrap_->fb_pack.curr_fb_arms.f8;
+    joint_effort_states_[0] = api_wrap_->fb_pack.curr_fb_arms.f1;
+    joint_effort_states_[1] = api_wrap_->fb_pack.curr_fb_arms.f2;
+    joint_effort_states_[2] = api_wrap_->fb_pack.curr_fb_arms.f3;
+    joint_effort_states_[3] = api_wrap_->fb_pack.curr_fb_arms.f4;
+    joint_effort_states_[4] = api_wrap_->fb_pack.curr_fb_arms.f5;
+    joint_effort_states_[5] = api_wrap_->fb_pack.curr_fb_arms.f6;
+    joint_effort_states_[6] = api_wrap_->fb_pack.curr_fb_arms.f7;
+    joint_effort_states_[7] = api_wrap_->fb_pack.curr_fb_arms.f8;
+  }
 
   // Reads joint position state from rtmon API feedback packet
-  fts_raw_states_[0] = api_wrap_->fb_pack.fs_curr_pose.fx;
-  fts_raw_states_[1] = api_wrap_->fb_pack.fs_curr_pose.fy;
-  fts_raw_states_[2] = api_wrap_->fb_pack.fs_curr_pose.fz;
-  fts_raw_states_[3] = api_wrap_->fb_pack.fs_curr_pose.mx;
-  fts_raw_states_[4] = api_wrap_->fb_pack.fs_curr_pose.my;
-  fts_raw_states_[5] = api_wrap_->fb_pack.fs_curr_pose.mz;
+
+  fts_curr_states_[0] = api_wrap_->fb_pack.fs_curr_pose.fx;
+  fts_curr_states_[1] = api_wrap_->fb_pack.fs_curr_pose.fy;
+  fts_curr_states_[2] = api_wrap_->fb_pack.fs_curr_pose.fz;
+  fts_curr_states_[3] = api_wrap_->fb_pack.fs_curr_pose.mx;
+  fts_curr_states_[4] = api_wrap_->fb_pack.fs_curr_pose.my;
+  fts_curr_states_[5] = api_wrap_->fb_pack.fs_curr_pose.mz;
 
   fts_before_states_[0] = api_wrap_->fb_pack.fs_before.fx;
   fts_before_states_[1] = api_wrap_->fb_pack.fs_before.fy;
@@ -401,38 +416,33 @@ std::vector<hardware_interface::StateInterface> MELFAMonitorHardwareInterface::e
   std::vector<hardware_interface::StateInterface> state_interfaces_;
 
   // Add joint position states as reference to State interfaces
-  for (uint i = 0; i < info_.joints.size(); i++)
+  if (joint_broadcaster_toggle != 0)
   {
-    state_interfaces_.emplace_back(hardware_interface::StateInterface(
-        info_.joints[i].name, hardware_interface::HW_IF_POSITION, &joint_position_states_[i]));
-  }
+    for (uint i = 0; i < info_.joints.size(); i++)
+    {
+      state_interfaces_.emplace_back(hardware_interface::StateInterface(
+          info_.joints[i].name, hardware_interface::HW_IF_POSITION, &joint_position_states_[i]));
+    }
 
-  for (uint i = 0; i < info_.joints.size(); i++)
-  {
-    state_interfaces_.emplace_back(hardware_interface::StateInterface(
-        info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &joint_velocity_states_[i]));
-  }
+    for (uint i = 0; i < info_.joints.size(); i++)
+    {
+      state_interfaces_.emplace_back(hardware_interface::StateInterface(
+          info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &joint_velocity_states_[i]));
+    }
 
-  for (uint i = 0; i < info_.joints.size(); i++)
-  {
-    state_interfaces_.emplace_back(hardware_interface::StateInterface(
-        info_.joints[i].name, hardware_interface::HW_IF_EFFORT, &joint_effort_states_[i]));
+    for (uint i = 0; i < info_.joints.size(); i++)
+    {
+      state_interfaces_.emplace_back(hardware_interface::StateInterface(
+          info_.joints[i].name, hardware_interface::HW_IF_EFFORT, &joint_effort_states_[i]));
+    }
   }
 
   // export sensor state interface
-  try
-  {
-    for (uint i = 0; i < info_.sensors[0].state_interfaces.size(); i++)
-    {
-      state_interfaces_.emplace_back(hardware_interface::StateInterface(
-          info_.sensors[0].name, info_.sensors[0].state_interfaces[i].name, &fts_raw_states_[i]));
-    }
-  }
-  catch (const std::exception& e)
-  {
-    fprintf(stderr, "Exception thrown during init stage with message: %s \n", e.what());
 
-    return state_interfaces_;
+  for (uint i = 0; i < info_.sensors[0].state_interfaces.size(); i++)
+  {
+    state_interfaces_.emplace_back(hardware_interface::StateInterface(
+        info_.sensors[0].name, info_.sensors[0].state_interfaces[i].name, &fts_curr_states_[i]));
   }
 
   for (uint i = 0; i < info_.sensors[1].state_interfaces.size(); i++)
@@ -511,13 +521,6 @@ std::vector<hardware_interface::CommandInterface> MELFAMonitorHardwareInterface:
    */
 
   std::vector<hardware_interface::CommandInterface> command_interfaces_;
-
-  // Add joint position commands as reference to Command interfaces
-  // for (size_t i = 0; i < info_.joints.size(); ++i)
-  // {
-  //   command_interfaces_.emplace_back(hardware_interface::CommandInterface(
-  //       info_.joints[i].name, hardware_interface::HW_IF_POSITION, &joint_position_commands_[i]));
-  // }
 
   general1_io_commands_.resize(MELFAGpioConstants::io_cmd_pack_size);
   general2_io_commands_.resize(MELFAGpioConstants::io_cmd_pack_size);
@@ -634,39 +637,44 @@ hardware_interface::return_type MELFAMonitorHardwareInterface::read(const rclcpp
     dat4_count_ = 0;
   }
 
-  joint_position_states_[0] = api_wrap_->fb_pack.jnt_EFB.j1;
-  joint_position_states_[1] = api_wrap_->fb_pack.jnt_EFB.j2;
-  joint_position_states_[2] = api_wrap_->fb_pack.jnt_EFB.j3;
-  joint_position_states_[3] = api_wrap_->fb_pack.jnt_EFB.j4;
-  joint_position_states_[4] = api_wrap_->fb_pack.jnt_EFB.j5;
-  joint_position_states_[5] = api_wrap_->fb_pack.jnt_EFB.j6;
-  joint_position_states_[6] = api_wrap_->fb_pack.jnt_EFB.j7;
-  joint_position_states_[7] = api_wrap_->fb_pack.jnt_EFB.j8;
+  if (joint_broadcaster_toggle != 0)
+  {
+    joint_position_states_[0] = api_wrap_->fb_pack.jnt_EFB.j1;
+    joint_position_states_[1] = api_wrap_->fb_pack.jnt_EFB.j2;
+    joint_position_states_[2] = api_wrap_->fb_pack.jnt_EFB.j3;
+    joint_position_states_[3] = api_wrap_->fb_pack.jnt_EFB.j4;
+    joint_position_states_[4] = api_wrap_->fb_pack.jnt_EFB.j5;
+    joint_position_states_[5] = api_wrap_->fb_pack.jnt_EFB.j6;
+    joint_position_states_[6] = api_wrap_->fb_pack.jnt_EFB.j7;
+    joint_position_states_[7] = api_wrap_->fb_pack.jnt_EFB.j8;
 
-  joint_velocity_states_[0] = api_wrap_->fb_pack.speed_fb.m1;
-  joint_velocity_states_[1] = api_wrap_->fb_pack.speed_fb.m2;
-  joint_velocity_states_[2] = api_wrap_->fb_pack.speed_fb.m3;
-  joint_velocity_states_[3] = api_wrap_->fb_pack.speed_fb.m4;
-  joint_velocity_states_[4] = api_wrap_->fb_pack.speed_fb.m5;
-  joint_velocity_states_[5] = api_wrap_->fb_pack.speed_fb.m6;
-  joint_velocity_states_[6] = api_wrap_->fb_pack.speed_fb.m7;
-  joint_velocity_states_[7] = api_wrap_->fb_pack.speed_fb.m8;
+    joint_velocity_states_[0] = api_wrap_->fb_pack.speed_fb.m1;
+    joint_velocity_states_[1] = api_wrap_->fb_pack.speed_fb.m2;
+    joint_velocity_states_[2] = api_wrap_->fb_pack.speed_fb.m3;
+    joint_velocity_states_[3] = api_wrap_->fb_pack.speed_fb.m4;
+    joint_velocity_states_[4] = api_wrap_->fb_pack.speed_fb.m5;
+    joint_velocity_states_[5] = api_wrap_->fb_pack.speed_fb.m6;
+    joint_velocity_states_[6] = api_wrap_->fb_pack.speed_fb.m7;
+    joint_velocity_states_[7] = api_wrap_->fb_pack.speed_fb.m8;
 
-  joint_effort_states_[0] = api_wrap_->fb_pack.curr_fb_arms.f1;
-  joint_effort_states_[1] = api_wrap_->fb_pack.curr_fb_arms.f2;
-  joint_effort_states_[2] = api_wrap_->fb_pack.curr_fb_arms.f3;
-  joint_effort_states_[3] = api_wrap_->fb_pack.curr_fb_arms.f4;
-  joint_effort_states_[4] = api_wrap_->fb_pack.curr_fb_arms.f5;
-  joint_effort_states_[5] = api_wrap_->fb_pack.curr_fb_arms.f6;
-  joint_effort_states_[6] = api_wrap_->fb_pack.curr_fb_arms.f7;
-  joint_effort_states_[7] = api_wrap_->fb_pack.curr_fb_arms.f8;
+    joint_effort_states_[0] = api_wrap_->fb_pack.curr_fb_arms.f1;
+    joint_effort_states_[1] = api_wrap_->fb_pack.curr_fb_arms.f2;
+    joint_effort_states_[2] = api_wrap_->fb_pack.curr_fb_arms.f3;
+    joint_effort_states_[3] = api_wrap_->fb_pack.curr_fb_arms.f4;
+    joint_effort_states_[4] = api_wrap_->fb_pack.curr_fb_arms.f5;
+    joint_effort_states_[5] = api_wrap_->fb_pack.curr_fb_arms.f6;
+    joint_effort_states_[6] = api_wrap_->fb_pack.curr_fb_arms.f7;
+    joint_effort_states_[7] = api_wrap_->fb_pack.curr_fb_arms.f8;
+  }
 
-  fts_raw_states_[0] = api_wrap_->fb_pack.fs_curr_pose.fx;
-  fts_raw_states_[1] = api_wrap_->fb_pack.fs_curr_pose.fy;
-  fts_raw_states_[2] = api_wrap_->fb_pack.fs_curr_pose.fz;
-  fts_raw_states_[3] = api_wrap_->fb_pack.fs_curr_pose.mx;
-  fts_raw_states_[4] = api_wrap_->fb_pack.fs_curr_pose.my;
-  fts_raw_states_[5] = api_wrap_->fb_pack.fs_curr_pose.mz;
+  // Reads joint position state from rtmon API feedback packet
+
+  fts_curr_states_[0] = api_wrap_->fb_pack.fs_curr_pose.fx;
+  fts_curr_states_[1] = api_wrap_->fb_pack.fs_curr_pose.fy;
+  fts_curr_states_[2] = api_wrap_->fb_pack.fs_curr_pose.fz;
+  fts_curr_states_[3] = api_wrap_->fb_pack.fs_curr_pose.mx;
+  fts_curr_states_[4] = api_wrap_->fb_pack.fs_curr_pose.my;
+  fts_curr_states_[5] = api_wrap_->fb_pack.fs_curr_pose.mz;
 
   fts_before_states_[0] = api_wrap_->fb_pack.fs_before.fx;
   fts_before_states_[1] = api_wrap_->fb_pack.fs_before.fy;
