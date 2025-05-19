@@ -1,0 +1,100 @@
+#    COPYRIGHT (C) 2024 Mitsubishi Electric Corporation
+
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+
+#        http://www.apache.org/licenses/LICENSE-2.0
+
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+controller_limits:
+  R: 
+    general1_io_limits: 10000, 10031 # U3En\HG0
+    general2_io_limits: 10032, 10063 # U3En\HG1
+    user1_io_limits: 11024, 11919 # U3En\HG32 ~ U3En\HG59
+    user2_io_limits: 11920, 12815 # U3En\HG60 ~ U3En\HG87
+    user3_io_limits: 12816, 13711 # U3En\HG88 ~ U3En\HG115
+    user4_io_limits: 13712, 14607 # U3En\HG116 ~ U3En\HG143
+    user5_io_limits: 14608, 15503 # U3En\HG144 ~ U3En\HG171
+    user6_io_limits: 15504, 16399 # U3En\HG172 ~ U3En\HG199
+    user7_io_limits: 16400, 17295 # U3En\HG200 ~ U3En\HG227
+    user8_io_limits: 17296, 18191 # U3En\HG228 ~ U3En\HG255
+  
+  Q: 
+    general1_io_limits: 10000, 10031 # U3En\HG0
+    general2_io_limits: 10032, 10063 # U3En\HG1
+    user1_io_limits: 11024, 11919 # U3En\HG32 ~ U3En\HG59
+    user2_io_limits: 11920, 12815 # U3En\HG60 ~ U3En\HG87
+    user3_io_limits: 12816, 13711 # U3En\HG88 ~ U3En\HG115
+    user4_io_limits: 13712, 14607 # U3En\HG116 ~ U3En\HG143
+    user5_io_limits: 14608, 15503 # U3En\HG144 ~ U3En\HG171
+    user6_io_limits: 15504, 16399 # U3En\HG172 ~ U3En\HG199
+    user7_io_limits: 16400, 17295 # U3En\HG200 ~ U3En\HG227
+    user8_io_limits: 17296, 18191 # U3En\HG228 ~ U3En\HG255
+  
+  D: 
+    general1_io_limits: 10000, 10031 # U3En\HG0
+    general2_io_limits: 10032, 10063 # U3En\HG1
+    user1_io_limits: 11024, 12047 # U3En\HG32 ~ U3En\HG63
+    user2_io_limits: 12048, 14095 # U3En\HG64 ~ U3En\HG127
+    user3_io_limits: 14096, 16143 # U3En\HG128 ~ U3En\HG191
+    user4_io_limits: 16144, 18191 # U3En\HG192 ~ U3En\HG255
+    user5_io_limits: 6000, 7023 # CC-Link IE Field Basic
+    user6_io_limits: 7024, 8047 # CC-Link IE Field Basic
+    user7_io_limits: 0, 31 # Parallel I/O Unit Slot 1
+    user8_io_limits: 32, 63 # Parallel I/O Unit Slot 2
+
+control_mode_io:
+  io_mode: 1111111111
+
+# Refer to table below to select your data for data_queue:
+# 0   | no data
+# 1   | XYZ position (Command) *Angle in radians
+# 2   | Joint position (Command) *Angle in radians
+# 3   | Motor pulse position (Command)
+# 7   | XYZ position (Feedback) *Angle in radians
+# 8   | Joint position (Feedback) *Angle in radians
+# 9   | Motor pulse position (Feedback)
+# 10  | Current command [0.1% rate]
+# 11  | Current feedback [0.1% rate]
+# 12  | Robot informationData structure
+# 13  | Position droop
+# 14  | Speed (Command) [rpm]
+# 15  | Speed (Feedback) [rpm]
+# 16  | Axis load level [%]
+# 17  | Encoder temperature [°C]
+# 18  | Encoder miscount
+# 19  | Motor voltage [V]
+# 20  | Regeneration level [%]
+# 21  | Tolerable command + [0.1% rate]
+# 22  | Tolerable command - [0.1% rate]
+# 23  | RMS current [0.1% rate]
+# 101 | Force sensor current position xyz[N]abc[Nm]
+# 102 | Force sensor original data (after offset cancel) xyz[N]abc[Nm]
+# 103 | Force sensor original data (before offset cancel) xyz[N]abc[Nm]
+# 104 | Position command of the force sensor correction
+# 111 | COL presumed torque [0.1% rate]
+# 112 | COL threshold + [0.1% rate]
+# 113 | COL threshold - [0.1% rate]
+# 1001| XYZ position (Command) *Angle in degrees
+# 1002| Joint position (Command) *Angle in degrees
+# 1007| XYZ position (Feedback) *Angle in degrees
+# 1008| Joint position (Feedback) *Angle in degrees
+# 1010| Current command [Arms]
+# 1011| Current feedback [Arms]
+# 1012| Tolerable command + [Arms]
+# 1013| Tolerable command - [Arms]
+# 1014| RMS current [Arms]
+
+data_queue:
+  data_1_queue: 101, 8, 7
+  data_2_queue: 102, 15, 13
+  data_3_queue: 103, 1011, 104
+  data_4_queue: 0, 1, 2, 3
+
+

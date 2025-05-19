@@ -1,0 +1,174 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="monitor_hardware" params="name prefix robot_ip send_port recv_port packet_lost_log  controller_config controller_type joint_broadcaster">
+        <xacro:property name="ctrl_limits" value="${xacro.load_yaml(controller_config)['controller_limits']}"/>
+        <xacro:property name="ctrl_mode" value="${xacro.load_yaml(controller_config)['control_mode_io']}"/>
+        <xacro:property name="data_queue" value="${xacro.load_yaml(controller_config)['data_queue']}"/>
+
+         <ros2_control name="${name}" type="system">
+            <hardware>
+                <plugin>melfa_monitor/MELFAMonitorHardwareInterface</plugin>
+                <param name="prefix">${prefix}</param>
+                <param name="robot_ip">${robot_ip}</param>
+                <param name="send_port">${send_port}</param>
+                <param name="recv_port">${recv_port}</param>
+                <param name="packet_lost_log">${packet_lost_log}</param>
+                <param name="joint_broadcaster">${joint_broadcaster}</param>
+                 <!-- Controller Type R/Q/D -->
+                <param name="controller_type">${controller_type}</param>
+                <!-- Limits of IO with respect to controller_type -->
+                <param name="general1_io_limits">${ctrl_limits[controller_type]['general1_io_limits']}</param>
+                <param name="general2_io_limits">${ctrl_limits[controller_type]['general2_io_limits']}</param>
+                <param name="user1_io_limits">${ctrl_limits[controller_type]['user1_io_limits']}</param>
+                <param name="user2_io_limits">${ctrl_limits[controller_type]['user2_io_limits']}</param>
+                <param name="user3_io_limits">${ctrl_limits[controller_type]['user3_io_limits']}</param>
+                <param name="user4_io_limits">${ctrl_limits[controller_type]['user4_io_limits']}</param>
+                <param name="user5_io_limits">${ctrl_limits[controller_type]['user5_io_limits']}</param>
+                <param name="user6_io_limits">${ctrl_limits[controller_type]['user6_io_limits']}</param>
+                <param name="user7_io_limits">${ctrl_limits[controller_type]['user7_io_limits']}</param>
+                <param name="user8_io_limits">${ctrl_limits[controller_type]['user8_io_limits']}</param>
+                <param name="data_1_queue">${data_queue['data_1_queue']}</param>
+                <param name="data_2_queue">${data_queue['data_2_queue']}</param>
+                <param name="data_3_queue">${data_queue['data_3_queue']}</param>
+                <param name="data_4_queue">${data_queue['data_4_queue']}</param>
+                <param name="io_control_mode">${ctrl_mode['io_mode']}</param> 
+            </hardware>
+
+            <xacro:if value="${joint_broadcaster}">
+                <joint name="${prefix}joint_1">
+                    <state_interface name="position"/>
+                    <state_interface name="velocity"/>
+                    <state_interface name="effort"/>
+                </joint>
+                <joint name="${prefix}joint_2">
+                    <state_interface name="position"/>
+                    <state_interface name="velocity"/>
+                    <state_interface name="effort"/>
+                </joint>
+                <joint name="${prefix}joint_3">
+                    <state_interface name="position"/>
+                    <state_interface name="velocity"/>
+                    <state_interface name="effort"/>
+                </joint>
+                <joint name="${prefix}joint_4">
+                    <state_interface name="position"/>
+                    <state_interface name="velocity"/>
+                    <state_interface name="effort"/>
+                </joint>
+                <joint name="${prefix}joint_5">
+                    <state_interface name="position"/>
+                    <state_interface name="velocity"/>
+                    <state_interface name="effort"/>
+                </joint>
+                <joint name="${prefix}joint_6">
+                    <state_interface name="position"/>
+                    <state_interface name="velocity"/>
+                    <state_interface name="effort"/>
+                </joint>
+                <joint name="${prefix}joint_7">
+                    <state_interface name="position"/>
+                    <state_interface name="velocity"/>
+                    <state_interface name="effort"/>
+                </joint>
+                <joint name="${prefix}joint_8">
+                    <state_interface name="position"/>
+                    <state_interface name="velocity"/>
+                    <state_interface name="effort"/>
+                </joint>
+            </xacro:if>
+
+            <xacro:macro name="gpio_interface" params="interface_name add_state_interfaces add_command_interfaces">
+            <gpio name="${interface_name}">
+
+                <!-- Add state_interface blocks if specified -->
+                <xacro:if value="${add_state_interfaces}">
+                <state_interface name="input_addrr"/>
+                <state_interface name="output_addrr"/>
+                <state_interface name="input_data"/>
+                <state_interface name="output_data"/>
+                </xacro:if>
+
+                <!-- Add command_interface blocks if specified -->
+                <xacro:if value="${add_command_interfaces}">
+                <command_interface name="input_addrr"/>
+                <command_interface name="output_addrr"/>
+                </xacro:if>
+
+            </gpio>
+            </xacro:macro>
+
+            <xacro:gpio_interface interface_name="general1_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="general2_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="user1_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="user2_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="user3_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="user4_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="user5_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="user6_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="user7_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            <xacro:gpio_interface interface_name="user8_io" add_state_interfaces="true" add_command_interfaces="true"/>
+            
+            <gpio name="io_control_mode">
+                <state_interface name="io_mode"/>
+                <command_interface name="io_mode"/>
+            </gpio>
+
+            <gpio name="ctrl">
+                <state_interface name="ctrl_type"/>
+                <command_interface name="ctrl_type"/>
+            </gpio>
+            
+            <sensor name="fts_curr_sensor">
+                <state_interface name="force.x"/>
+                <state_interface name="force.y"/>
+                <state_interface name="force.z"/>
+                <state_interface name="torque.x"/>
+                <state_interface name="torque.y"/>
+                <state_interface name="torque.z"/>
+                <param name="frame_id">tool_1</param>
+                <param name="fx_range">1000</param>
+                <param name="fy_range">1000</param>
+                <param name="fz_range">1000</param>
+                <param name="tx_range">30</param>
+                <param name="ty_range">30</param>
+                <param name="tz_range">30</param>
+            </sensor>
+
+            <sensor name="fts_before_offset_sensor">
+                <state_interface name="force.x"/>
+                <state_interface name="force.y"/>
+                <state_interface name="force.z"/>
+                <state_interface name="torque.x"/>
+                <state_interface name="torque.y"/>
+                <state_interface name="torque.z"/>
+                <param name="frame_id">default_tcp</param>
+                <param name="fx_range">1000</param>
+                <param name="fy_range">1000</param>
+                <param name="fz_range">1000</param>
+                <param name="tx_range">30</param>
+                <param name="ty_range">30</param>
+                <param name="tz_range">30</param>
+            </sensor>
+
+            <sensor name="fts_after_offset_sensor">
+                <state_interface name="force.x"/>
+                <state_interface name="force.y"/>
+                <state_interface name="force.z"/>
+                <state_interface name="torque.x"/>
+                <state_interface name="torque.y"/>
+                <state_interface name="torque.z"/>
+                <param name="frame_id">tool_1</param>
+                <param name="fx_range">1000</param>
+                <param name="fy_range">1000</param>
+                <param name="fz_range">1000</param>
+                <param name="tx_range">30</param>
+                <param name="ty_range">30</param>
+                <param name="tz_range">30</param>
+            </sensor>
+
+        </ros2_control>
+
+    </xacro:macro>
+
+</robot>

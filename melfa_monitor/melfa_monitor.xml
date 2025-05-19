@@ -1,0 +1,9 @@
+<library path="melfa_monitor">
+    <class name="melfa_monitor/MELFAMonitorHardwareInterface"
+            type="melfa_monitor::MELFAMonitorHardwareInterface"
+            base_class_type="hardware_interface::SystemInterface">
+        <description>
+            Hardware plugin for MELFA Real Time Monitor Function.
+        </description>
+    </class>
+</library>
