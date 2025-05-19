@@ -10,6 +10,7 @@ install/
 log/
 devel/
 logs/
+.vscode/**
 CATKIN_IGNORE
 
 # OS files
