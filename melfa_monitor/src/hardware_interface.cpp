@@ -103,9 +103,15 @@ MELFAMonitorHardwareInterface::on_init(const hardware_interface::HardwareInfo& s
 
   // joint_broadcaster_toggle = stoi(info_.hardware_parameters["joint_broadcaster"]);
   if (info_.hardware_parameters["joint_broadcaster"] == "False")
+  {
     joint_broadcaster_toggle = 0;
+    RCLCPP_WARN(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "Joint Broadcaster is OFF");
+  }
   else
+  {
     joint_broadcaster_toggle = 1;
+    RCLCPP_WARN(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "Joint Broadcaster is ON");
+  }
 
   // Reading user defined IO binary control mode and MELFA Controller type
   io_control_mode_ = info_.hardware_parameters["io_control_mode"];
@@ -252,15 +258,20 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
   *(api_wrap_->cmd_pack.mon_dat + 3) = dat4_queue_[dat4_count_];  // set forth feedback
 
   // Initialize external control in robot controller.
-  if (api_wrap_->WriteToRobot_MON_() != 0)
+  uint8_t to_cc = 0;
+  while (api_wrap_->ReadFromRobot_FB_() != 0 && to_cc < 100)
   {
-    RCLCPP_FATAL(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "ERROR: Enable to connect to robot.");
-    return hardware_interface::CallbackReturn::ERROR;
+    if (api_wrap_->WriteToRobot_MON_() != 0)
+    {
+      RCLCPP_FATAL(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "ERROR: Unable to send command to robot.");
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+    to_cc++;
   }
 
-  if (api_wrap_->ReadFromRobot_FB_() != 0)
+  if (to_cc >= 100)
   {
-    RCLCPP_FATAL(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "ERROR: Enable to connect to robot.");
+    RCLCPP_FATAL(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "ERROR: Unable to connect to robot. First receive FAIL");
     return hardware_interface::CallbackReturn::ERROR;
   }
 
@@ -278,14 +289,14 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
     joint_position_states_[6] = api_wrap_->fb_pack.jnt_EFB.j7;
     joint_position_states_[7] = api_wrap_->fb_pack.jnt_EFB.j8;
 
-    joint_velocity_states_[0] = api_wrap_->fb_pack.speed_fb.m1;
-    joint_velocity_states_[1] = api_wrap_->fb_pack.speed_fb.m2;
-    joint_velocity_states_[2] = api_wrap_->fb_pack.speed_fb.m3;
-    joint_velocity_states_[3] = api_wrap_->fb_pack.speed_fb.m4;
-    joint_velocity_states_[4] = api_wrap_->fb_pack.speed_fb.m5;
-    joint_velocity_states_[5] = api_wrap_->fb_pack.speed_fb.m6;
-    joint_velocity_states_[6] = api_wrap_->fb_pack.speed_fb.m7;
-    joint_velocity_states_[7] = api_wrap_->fb_pack.speed_fb.m8;
+    joint_velocity_states_[0] = api_wrap_->fb_pack.speed_fb.m1 / 100.0;
+    joint_velocity_states_[1] = api_wrap_->fb_pack.speed_fb.m2 / 100.0;
+    joint_velocity_states_[2] = api_wrap_->fb_pack.speed_fb.m3 / 100.0;
+    joint_velocity_states_[3] = api_wrap_->fb_pack.speed_fb.m4 / 100.0;
+    joint_velocity_states_[4] = api_wrap_->fb_pack.speed_fb.m5 / 100.0;
+    joint_velocity_states_[5] = api_wrap_->fb_pack.speed_fb.m6 / 100.0;
+    joint_velocity_states_[6] = api_wrap_->fb_pack.speed_fb.m7 / 100.0;
+    joint_velocity_states_[7] = api_wrap_->fb_pack.speed_fb.m8 / 100.0;
 
     joint_effort_states_[0] = api_wrap_->fb_pack.curr_fb_arms.f1;
     joint_effort_states_[1] = api_wrap_->fb_pack.curr_fb_arms.f2;
@@ -295,6 +306,7 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
     joint_effort_states_[5] = api_wrap_->fb_pack.curr_fb_arms.f6;
     joint_effort_states_[6] = api_wrap_->fb_pack.curr_fb_arms.f7;
     joint_effort_states_[7] = api_wrap_->fb_pack.curr_fb_arms.f8;
+    RCLCPP_INFO(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "Joint States Published!");
   }
 
   // Reads joint position state from rtmon API feedback packet
@@ -319,6 +331,8 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
   fts_after_states_[3] = api_wrap_->fb_pack.fs_after.mx;
   fts_after_states_[4] = api_wrap_->fb_pack.fs_after.my;
   fts_after_states_[5] = api_wrap_->fb_pack.fs_after.mz;
+
+  RCLCPP_INFO(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "FT Sensor States Published!");
 
   // Initialization of IO commands
   general1_io_commands_[0] = general1_io_limits_[0];
@@ -648,14 +662,14 @@ hardware_interface::return_type MELFAMonitorHardwareInterface::read(const rclcpp
     joint_position_states_[6] = api_wrap_->fb_pack.jnt_EFB.j7;
     joint_position_states_[7] = api_wrap_->fb_pack.jnt_EFB.j8;
 
-    joint_velocity_states_[0] = api_wrap_->fb_pack.speed_fb.m1;
-    joint_velocity_states_[1] = api_wrap_->fb_pack.speed_fb.m2;
-    joint_velocity_states_[2] = api_wrap_->fb_pack.speed_fb.m3;
-    joint_velocity_states_[3] = api_wrap_->fb_pack.speed_fb.m4;
-    joint_velocity_states_[4] = api_wrap_->fb_pack.speed_fb.m5;
-    joint_velocity_states_[5] = api_wrap_->fb_pack.speed_fb.m6;
-    joint_velocity_states_[6] = api_wrap_->fb_pack.speed_fb.m7;
-    joint_velocity_states_[7] = api_wrap_->fb_pack.speed_fb.m8;
+    joint_velocity_states_[0] = api_wrap_->fb_pack.speed_fb.m1 / 100.0;
+    joint_velocity_states_[1] = api_wrap_->fb_pack.speed_fb.m2 / 100.0;
+    joint_velocity_states_[2] = api_wrap_->fb_pack.speed_fb.m3 / 100.0;
+    joint_velocity_states_[3] = api_wrap_->fb_pack.speed_fb.m4 / 100.0;
+    joint_velocity_states_[4] = api_wrap_->fb_pack.speed_fb.m5 / 100.0;
+    joint_velocity_states_[5] = api_wrap_->fb_pack.speed_fb.m6 / 100.0;
+    joint_velocity_states_[6] = api_wrap_->fb_pack.speed_fb.m7 / 100.0;
+    joint_velocity_states_[7] = api_wrap_->fb_pack.speed_fb.m8 / 100.0;
 
     joint_effort_states_[0] = api_wrap_->fb_pack.curr_fb_arms.f1;
     joint_effort_states_[1] = api_wrap_->fb_pack.curr_fb_arms.f2;
