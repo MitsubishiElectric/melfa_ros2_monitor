@@ -12,7 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-controller_manager:
+/rc1/controller_manager:
   ros__parameters:
     update_rate: 286  #Hz
 
@@ -31,23 +31,23 @@ controller_manager:
     fts_after_offset_broadcaster:
       type: force_torque_sensor_broadcaster/ForceTorqueSensorBroadcaster
 
-fts_curr_broadcaster:
+/rc1/fts_curr_broadcaster:
   ros__parameters:
       sensor_name: fts_curr_sensor
       frame_id: tool_1
 
 
-fts_before_offset_broadcaster:
+/rc1/fts_before_offset_broadcaster:
   ros__parameters:
       sensor_name: fts_before_offset_sensor
       frame_id: default_tcp
 
-fts_after_offset_broadcaster:
+/rc1/fts_after_offset_broadcaster:
   ros__parameters:
     sensor_name: fts_after_offset_sensor
     frame_id: tool_1
 
-joint_state_broadcaster:
+/rc1/joint_state_broadcaster:
   ros__parameters:
     state_interfaces:
       - position
@@ -67,7 +67,7 @@ joint_state_broadcaster:
     action_monitor_rate: 20.0 # Defaults to 20
 
 
-io_mon_controller:
+/rc1/io_mon_controller:
   ros__parameters:
     general1_io_state_interfaces:
       - general1_io/input_addrr

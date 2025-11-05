@@ -26,6 +26,14 @@ def generate_launch_description():
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
+            "namespace",
+            default_value="/rc1",
+            description="Namespace of controller manager and controllers. This is useful for \
+        multi-robot scenarios.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'runtime_config_package',
             default_value='melfa_mon_description',
             description='Package with the controller\'s configuration in "config" folder. \
@@ -57,7 +65,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "controller_manager_name",
-            default_value="/controller_manager",
+            default_value="/rc1/controller_manager",
             description="Full name of the controller manager. This values should be set if \
         controller manager is used under a namespace.",
         )
@@ -112,6 +120,7 @@ def generate_launch_description():
         )
     )
     # Initialize Arguments
+    namespace = LaunchConfiguration("namespace")
     runtime_config_package = LaunchConfiguration('runtime_config_package')
     controllers_file = LaunchConfiguration('controllers_file')
     description_package = LaunchConfiguration('description_package')
@@ -172,6 +181,7 @@ def generate_launch_description():
     control_node = Node(
         package='controller_manager',
         executable='ros2_control_node',
+        namespace=namespace,
         parameters=[robot_description, ParameterFile(robot_controllers, allow_substs=True)],
         output={
             'stdout': 'screen',
@@ -183,6 +193,7 @@ def generate_launch_description():
     joint_monitor_state_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
+        namespace=namespace,
         arguments=['joint_state_broadcaster', '--controller-manager', controller_manager_name],
         condition=IfCondition(joint_broadcaster)
     )
@@ -190,24 +201,28 @@ def generate_launch_description():
     fts_curr_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
+        namespace=namespace,
         arguments=['fts_curr_broadcaster', '--controller-manager', controller_manager_name],
     )
 
     fts_before_offset_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
+        namespace=namespace,
         arguments=['fts_before_offset_broadcaster', '--controller-manager', controller_manager_name],
     )
 
     fts_after_offset_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
+        namespace=namespace,
         arguments=['fts_after_offset_broadcaster', '--controller-manager', controller_manager_name],
     )
 
     gpio_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
+        namespace=namespace,
         arguments=["io_mon_controller", "-c", controller_manager_name],
     )
 
