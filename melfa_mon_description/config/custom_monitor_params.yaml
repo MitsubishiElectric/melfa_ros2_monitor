@@ -50,7 +50,7 @@ controller_limits:
     user8_io_limits: 32, 63 # Parallel I/O Unit Slot 2
 
 control_mode_io:
-  io_mode: 1111111111
+  io_mode: "1111111111"
 
 # Refer to table below to select your data for data_queue:
 # 0   | no data
@@ -92,9 +92,9 @@ control_mode_io:
 # 1014| RMS current [Arms]
 
 data_queue:
-  data_1_queue: 101, 8, 7
-  data_2_queue: 102, 15, 13
-  data_3_queue: 103, 1011, 104
-  data_4_queue: 0, 1, 2, 3
+  data_1_queue: 101
+  data_2_queue: 103
+  data_3_queue: 7, 18, 17 ,19
+  data_4_queue: 8, 15, 1011
 
 

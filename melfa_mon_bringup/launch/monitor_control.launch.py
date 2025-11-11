@@ -34,6 +34,14 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
+            "robot_model",
+            default_value="",
+            description="Namespace of controller manager and controllers. This is useful for \
+        multi-robot scenarios.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
             'runtime_config_package',
             default_value='melfa_mon_description',
             description='Package with the controller\'s configuration in "config" folder. \
@@ -121,6 +129,7 @@ def generate_launch_description():
     )
     # Initialize Arguments
     namespace = LaunchConfiguration("namespace")
+    robot_model = LaunchConfiguration("robot_model")
     runtime_config_package = LaunchConfiguration('runtime_config_package')
     controllers_file = LaunchConfiguration('controllers_file')
     description_package = LaunchConfiguration('description_package')
@@ -153,6 +162,9 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare(description_package), 'urdf', description_file]
             ),
+            ' ',
+            'robot_model:=',
+            robot_model,
             ' ',
             'robot_ip:=',
             robot_ip,
@@ -190,11 +202,19 @@ def generate_launch_description():
 
     )
 
-    joint_monitor_state_broadcaster_spawner = Node(
+    joint_state_broadcaster_spawner = Node(
         package='controller_manager',
         executable='spawner',
         namespace=namespace,
         arguments=['joint_state_broadcaster', '--controller-manager', controller_manager_name],
+        condition=IfCondition(joint_broadcaster)
+    )
+
+    motor_state_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        namespace=namespace,
+        arguments=['motor_state_broadcaster', '--controller-manager', controller_manager_name],
         condition=IfCondition(joint_broadcaster)
     )
 
@@ -219,6 +239,13 @@ def generate_launch_description():
         arguments=['fts_after_offset_broadcaster', '--controller-manager', controller_manager_name],
     )
 
+    tcp_state_broadcaster_spawner = Node(
+        package='controller_manager',
+        executable='spawner',
+        namespace=namespace,
+        arguments=['tcp_pose_broadcaster', '--controller-manager', controller_manager_name],
+    )
+
     gpio_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -228,11 +255,13 @@ def generate_launch_description():
 
     nodes = [
         control_node,
-        joint_monitor_state_broadcaster_spawner,
+        joint_state_broadcaster_spawner,
+        motor_state_broadcaster_spawner,
         gpio_controller_spawner,
         fts_curr_broadcaster_spawner,
         fts_before_offset_broadcaster_spawner,
-        fts_after_offset_broadcaster_spawner
+        fts_after_offset_broadcaster_spawner,
+        tcp_state_broadcaster_spawner
     ]
 
     return LaunchDescription(declared_arguments + nodes)

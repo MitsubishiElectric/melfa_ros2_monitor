@@ -12,9 +12,10 @@
   #  See the License for the specific language governing permissions and
   #  limitations under the License.
   
-# Controller type: [ Hand_io_min, Hand_io_max, plc_link_io_min, plc_link_io_max, 
-# DSI1-8-A Min, DSI1-8-A Max,  DSI1-8-B Min, DSI1-8-B Max, DSO1-4-A Min, DSO1-4-A Max, DSO1-4-B Min, DSO1-4-B Max, 
-# io_unit_min, io_unit_max, misc1_min, misc1_max, misc2_min, misc2_max, misc3_min, misc3_max]
+# Controller type: 
+#[ general1_io_min, general1_io_max, general2_io_min, general2_io_max, 
+# user1_io_min, user1_io_max, user2_io_min, user2_io_max, user3_io_min, user3_io_max, user4_io_min, user4_io_max,
+# user5_io_min, user5_io_max, user6_io_min, user6_io_max, user7_io_min, user7_io_max, user8_io_min, user8_io_max,]
 R: [10000, 10031, 10032, 10063, 11024, 11919, 11920, 12815, 12816, 13711, 13712, 14607, 14608, 15503, 15504, 16399, 16400, 17295, 17296, 18191]
 Q: [10000, 10031, 10032, 10063, 11024, 11919, 11920, 12815, 12816, 13711, 13712, 14607, 14608, 15503, 15504, 16399, 16400, 17295, 17296, 18191]
 D: [10000, 10031, 10032, 10063, 11024, 12047, 12048, 14095, 14096, 16143, 16144, 18191, 6000, 7023, 7024, 8047, 0, 31, 32, 63]

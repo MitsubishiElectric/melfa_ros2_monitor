@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:macro name="monitor_hardware" params="name prefix robot_ip send_port recv_port packet_lost_log  controller_config controller_type joint_broadcaster">
+    <xacro:macro name="monitor_hardware" params="name robot_model robot_ip send_port recv_port packet_lost_log  controller_config controller_type joint_broadcaster">
         <xacro:property name="ctrl_limits" value="${xacro.load_yaml(controller_config)['controller_limits']}"/>
         <xacro:property name="ctrl_mode" value="${xacro.load_yaml(controller_config)['control_mode_io']}"/>
         <xacro:property name="data_queue" value="${xacro.load_yaml(controller_config)['data_queue']}"/>
@@ -9,7 +9,7 @@
          <ros2_control name="${name}" type="system">
             <hardware>
                 <plugin>melfa_monitor/MELFAMonitorHardwareInterface</plugin>
-                <param name="prefix">${prefix}</param>
+                <param name="robot_model">${robot_model}</param>
                 <param name="robot_ip">${robot_ip}</param>
                 <param name="send_port">${send_port}</param>
                 <param name="recv_port">${recv_port}</param>
@@ -36,45 +36,69 @@
             </hardware>
 
             <xacro:if value="${joint_broadcaster}">
-                <joint name="${prefix}joint_1">
+                <joint name="${robot_model}joint_1">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
-                    <state_interface name="effort"/>
+                    <state_interface name="ampere_rms"/>
+                    <state_interface name="encoder_misscount"/>
+                    <state_interface name="encoder_temperature"/>
+                    <state_interface name="motor_voltage"/>
                 </joint>
-                <joint name="${prefix}joint_2">
+                <joint name="${robot_model}joint_2">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
-                    <state_interface name="effort"/>
+                    <state_interface name="ampere_rms"/>
+                    <state_interface name="encoder_misscount"/>
+                    <state_interface name="encoder_temperature"/>
+                    <state_interface name="motor_voltage"/>
                 </joint>
-                <joint name="${prefix}joint_3">
+                <joint name="${robot_model}joint_3">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
-                    <state_interface name="effort"/>
+                    <state_interface name="ampere_rms"/>
+                    <state_interface name="encoder_misscount"/>
+                    <state_interface name="encoder_temperature"/>
+                    <state_interface name="motor_voltage"/>
                 </joint>
-                <joint name="${prefix}joint_4">
+                <joint name="${robot_model}joint_4">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
-                    <state_interface name="effort"/>
+                    <state_interface name="ampere_rms"/>
+                    <state_interface name="encoder_misscount"/>
+                    <state_interface name="encoder_temperature"/>
+                    <state_interface name="motor_voltage"/>
                 </joint>
-                <joint name="${prefix}joint_5">
+                <joint name="${robot_model}joint_5">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
-                    <state_interface name="effort"/>
+                    <state_interface name="ampere_rms"/>
+                    <state_interface name="encoder_misscount"/>
+                    <state_interface name="encoder_temperature"/>
+                    <state_interface name="motor_voltage"/>
                 </joint>
-                <joint name="${prefix}joint_6">
+                <joint name="${robot_model}joint_6">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
-                    <state_interface name="effort"/>
+                    <state_interface name="ampere_rms"/>
+                    <state_interface name="encoder_misscount"/>
+                    <state_interface name="encoder_temperature"/>
+                    <state_interface name="motor_voltage"/>
                 </joint>
-                <joint name="${prefix}joint_7">
+                <joint name="${robot_model}joint_7">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
-                    <state_interface name="effort"/>
+                    <state_interface name="ampere_rms"/>
+                    <state_interface name="encoder_misscount"/>
+                    <state_interface name="encoder_temperature"/>
+                    <state_interface name="motor_voltage"/>
                 </joint>
-                <joint name="${prefix}joint_8">
+                <joint name="${robot_model}joint_8">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
-                    <state_interface name="effort"/>
+                    <state_interface name="ampere_rms"/>
+                    <state_interface name="encoder_misscount"/>
+                    <state_interface name="encoder_temperature"/>
+                    <state_interface name="motor_voltage"/>
                 </joint>
             </xacro:if>
 
@@ -126,7 +150,7 @@
                 <state_interface name="torque.x"/>
                 <state_interface name="torque.y"/>
                 <state_interface name="torque.z"/>
-                <param name="frame_id">tool_1</param>
+                <param name="frame_id">${robot_model}tool_0</param>
                 <param name="fx_range">1000</param>
                 <param name="fy_range">1000</param>
                 <param name="fz_range">1000</param>
@@ -142,7 +166,7 @@
                 <state_interface name="torque.x"/>
                 <state_interface name="torque.y"/>
                 <state_interface name="torque.z"/>
-                <param name="frame_id">default_tcp</param>
+                <param name="frame_id">${robot_model}default_tcp</param>
                 <param name="fx_range">1000</param>
                 <param name="fy_range">1000</param>
                 <param name="fz_range">1000</param>
@@ -158,13 +182,24 @@
                 <state_interface name="torque.x"/>
                 <state_interface name="torque.y"/>
                 <state_interface name="torque.z"/>
-                <param name="frame_id">tool_1</param>
+                <param name="frame_id">${robot_model}tool_1</param>
                 <param name="fx_range">1000</param>
                 <param name="fy_range">1000</param>
                 <param name="fz_range">1000</param>
                 <param name="tx_range">30</param>
                 <param name="ty_range">30</param>
                 <param name="tz_range">30</param>
+            </sensor>
+
+            <sensor name="${robot_model}tcp_pose">
+                <param name="frame_id">${robot_model}base</param>
+                <state_interface name="position.x"/>
+                <state_interface name="position.y"/>
+                <state_interface name="position.z"/>
+                <state_interface name="orientation.x"/>
+                <state_interface name="orientation.y"/>
+                <state_interface name="orientation.z"/>
+                <state_interface name="orientation.w"/>
             </sensor>
 
         </ros2_control>
