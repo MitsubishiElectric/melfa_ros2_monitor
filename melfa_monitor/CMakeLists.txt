@@ -18,6 +18,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(generate_parameter_library REQUIRED)
 find_package(yaml_cpp_vendor REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 
 
 include_directories(include)
@@ -40,6 +41,7 @@ ament_target_dependencies(
   pluginlib
   rclcpp
   rclcpp_lifecycle
+  tf2_geometry_msgs
 )
 pluginlib_export_plugin_description_file(hardware_interface melfa_monitor.xml)
 
@@ -77,6 +79,7 @@ ament_export_dependencies(
   pluginlib
   rclcpp
   rclcpp_lifecycle
+  tf2_geometry_msgs
 )
 
 ament_package()

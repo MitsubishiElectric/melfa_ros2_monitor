@@ -32,6 +32,7 @@
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"  // Lifecycle node interface for ROS 2
 #include "rclcpp_lifecycle/state.hpp"                                     // State definitions for ROS 2 lifecycle nodes
 #include "geometry_msgs/msg/transform_stamped.hpp"  // Message type for stamped transforms in ROS 2
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 
 // Include headers for system libraries
 #include <bitset>  // Provides the std::bitset class for managing bit fields
@@ -85,9 +86,6 @@ private:
   std::unique_ptr<MelfaEthernet::rtmon> api_wrap_;
   uint8_t packet_lost_log;
   uint8_t joint_broadcaster_toggle;
-  uint8_t fts_curr_broadcaster_toggle;
-  uint8_t fts_after_broadcaster_toggle;
-  uint8_t fts_before_broadcaster_toggle;
 
   bool execution_init_;
   unsigned int binary_config_;
@@ -95,10 +93,15 @@ private:
   // State Interfaces
   std::vector<double> joint_position_states_;
   std::vector<double> joint_velocity_states_;
-  std::vector<double> joint_effort_states_;
+  std::vector<double> joint_ampere_rms_states_;
+  std::vector<double> joint_current_rate_states_;
+  std::vector<double> joint_encoder_misscount_states_;
+  std::vector<double> joint_encoder_temperature_states_;
+  std::vector<double> motor_voltage_states_;
   std::vector<double> fts_curr_states_;
   std::vector<double> fts_before_states_;
   std::vector<double> fts_after_states_;
+  std::vector<double> tcp_pose_states_;
 
   // General 1 Interfaces
   std::string general1_io_name = "general1_io";
