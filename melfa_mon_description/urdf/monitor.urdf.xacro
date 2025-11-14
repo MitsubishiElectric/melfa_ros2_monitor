@@ -3,6 +3,7 @@
 
     <!-- Enable setting arguments from the launch file -->
     <xacro:arg name="robot_model" default="" />
+    <xacro:arg name="prefix" default="" />
     <xacro:arg name="robot_ip" default="192.168.0.20" />
     <xacro:arg name="send_port" default="12000" />
     <xacro:arg name="recv_port" default="12001" />
@@ -15,7 +16,8 @@
     <xacro:include filename="$(find melfa_mon_description)/ros2_control/monitor.hardware.xacro" />
 
     <xacro:monitor_hardware
-        name="rc1" 
+        name="$(arg robot_model)" 
+        prefix="$(arg prefix)"
         robot_model="$(arg robot_model)" 
         robot_ip="$(arg robot_ip)" 
         send_port="$(arg send_port)"
