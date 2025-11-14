@@ -1,7 +1,10 @@
 <img src="./figures/MELFA_t.png" width="400" height="98">
 
 
-# __MELFA ROS2 Usage__
+# __MELFA ROS2 Monitor Usage and Installation__
+
+
+
 
 
 ## __1. Installation__
@@ -52,24 +55,36 @@ colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
 source install/setup.bash
 ```
 
-## __2. Launch ros2_control__
+## __2. Launch MELFA ROS2 Monitor__
 
 You require a [real robot](./rt_real_setup.md) or [RT Toolbox3 simulator](./rt_sim_setup.md) to proceed. If you have not created your RT Toolbox3 project file, refer to [this guide](./rt_toolbox3_setup.md)
 </div>
 
-1. Launch robot arm with real robot or RT Toolbox3 simulator (the controller_type ["R" (or) "Q" (or) "D"] and robot_ip should be aligned with the robot) [Terminal 1]
+Launch robot arm with real robot or RT Toolbox3 simulator (the controller_type ["R" (or) "Q" (or) "D"] and robot_ip should be aligned with the robot) [Terminal 1]
 
 ```
-ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:=<CONTROLLER TYPE>  robot_ip:=<ROBOT IP>
+ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:=<CONTROLLER TYPE>  robot_ip:=<ROBOT IP> robot_model:=<ROBOT MODEL>  prefix:=<PREFIX>  namespace:=<NAMESPACE>  controller_manager_name:=<CONTROLLER MANAGER> send_port:=<SEND PORT> recv_port:=<RECEIVE PORT> 
+
 ```
 Example:
 
+1. Minimum required.
+
 ```
-ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="R" robot_ip:=192.168.3.100
+ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="R" robot_ip:=192.168.3.100 packet_lost_log:=0
+```
+2. For multi-instance, use the namespace argument. If the robots are NOT the same model, use the prefix argument.
+```
+# Terminal 1
+ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="R" robot_ip:=192.168.3.250 packet_lost_log:=0 robot_model:="rv7frl_" prefix:="rc1_" namespace:="/rc1" controller_manager_name:="/rc1/controller_manager" send_port:=12000 recv_port:=12001
+```
+```
+# Terminal 2
+ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="R" robot_ip:=192.168.3.250 packet_lost_log:=0 robot_model:="rv7frl_" prefix:="rc2_" namespace:="/rc2" controller_manager_name:="/rc2/controller_manager" send_port:=12100 recv_port:=12101
 ```
 
 
-## __4. Examples of I/O operations using command line interface__
+## __3. Examples of I/O operations using command line interface__
 
 This section will guide you through a simple demo of melfa_io_controllers using RT Toolbox3 simulator
 
@@ -236,7 +251,7 @@ output_data: 0
 
 ### Other guides:
 - [Home page](./../README.md)
-- [MELFA ROS2 user guide](./melfa_ros2_driver.md) : Usage and Installation of MELFA ROS2.
+- [MELFA ROS2 user guide](./melfa_ros2_monitor.md) : Usage and Installation of MELFA ROS2.
 - [RT Toolbox3 Setup](./rt_toolbox3_setup.md) : Create your first RT Toolbox3 Project File for ROS2.
 - [RT Toolbox3 Simulator Setup](./rt_sim_setup.md) : Connect to RT Toolbox3 simulator as if it is a real robot.
 - [RT Toolbox3 Real Robot Setup](./rt_real_setup.md): Connect to a MELFA robot.

@@ -27,7 +27,23 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "namespace",
-            default_value="/rc1",
+            default_value="",
+            description="Namespace of controller manager and controllers. This is useful for \
+        multi-robot scenarios.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "prefix",
+            default_value="",
+            description="Namespace of controller manager and controllers. This is useful for \
+        multi-robot scenarios.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "robot_model",
+            default_value="",
             description="Namespace of controller manager and controllers. This is useful for \
         multi-robot scenarios.",
         )
@@ -73,7 +89,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "controller_manager_name",
-            default_value="/rc1/controller_manager",
+            default_value="/controller_manager",
             description="Full name of the controller manager. This values should be set if \
         controller manager is used under a namespace.",
         )
@@ -129,6 +145,7 @@ def generate_launch_description():
     )
     # Initialize Arguments
     namespace = LaunchConfiguration("namespace")
+    prefix = LaunchConfiguration("prefix")
     robot_model = LaunchConfiguration("robot_model")
     runtime_config_package = LaunchConfiguration('runtime_config_package')
     controllers_file = LaunchConfiguration('controllers_file')
@@ -162,6 +179,9 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare(description_package), 'urdf', description_file]
             ),
+            ' ',
+            'prefix:=',
+            prefix,
             ' ',
             'robot_model:=',
             robot_model,
