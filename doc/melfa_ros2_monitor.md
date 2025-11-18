@@ -63,7 +63,7 @@ You require a [real robot](./rt_real_setup.md) or [RT Toolbox3 simulator](./rt_s
 Launch robot arm with real robot or RT Toolbox3 simulator (the controller_type ["R" (or) "Q" (or) "D"] and robot_ip should be aligned with the robot) [Terminal 1]
 
 ```
-ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:=<CONTROLLER TYPE>  robot_ip:=<ROBOT IP> robot_model:=<ROBOT MODEL>  prefix:=<PREFIX>  namespace:=<NAMESPACE>  controller_manager_name:=<CONTROLLER MANAGER> send_port:=<SEND PORT> recv_port:=<RECEIVE PORT> 
+ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:=<CONTROLLER TYPE>  robot_ip:=<ROBOT IP> robot_model:=<ROBOT MODEL>  prefix:=<PREFIX>  namespace:=<NAMESPACE>  controller_manager_name:=<CONTROLLER MANAGER> send_port:=<SEND PORT> recv_port:=<RECEIVE PORT> scara:=<SCARA>
 
 ```
 Example:
@@ -82,7 +82,15 @@ ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="R" rob
 # Terminal 2
 ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="R" robot_ip:=192.168.3.250 packet_lost_log:=0 robot_model:="rv7frl_" prefix:="rc2_" namespace:="/rc2" controller_manager_name:="/rc2/controller_manager" send_port:=12100 recv_port:=12101
 ```
-
+3. SCARA robots such as RH-6FRH, RH-6CRH, etc.
+```
+# Terminal 1
+ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="R" robot_ip:=192.168.3.250 packet_lost_log:=0 scara:=1
+```
+4. F-series robot controllers such as CR750 or CR751. Use controller type:="Q".
+```
+ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="Q" robot_ip:=192.168.3.100 packet_lost_log:=0
+```
 
 ## __3. Examples of I/O operations using command line interface__
 

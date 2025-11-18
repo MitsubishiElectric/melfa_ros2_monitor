@@ -73,6 +73,14 @@ This is not the preferred way as it requires a USB cable with a ferrite core to 
 
 </br>
 
+8. Select __Realtime Monitor__, ensure that __MONMODE__ is checked. Input port numbers for __Receive Port__ and __Send Port__ as shown in the images below.
+
+</br>
+  <img src="./figures/rtmon_ip_online.png" width="960" height="540">
+
+</br>
+
+
 ## __2. Connecting via Ethernet Cable__
 
 For connection guide, refer to [CR750/CR751 Series Controller, CR800 Series Controller Ethernet Function Instruction Manual](https://www.mitsubishielectric.com/fa/download/search.page?mode=manual&kisyu=/robot&q=CR750%2FCR751%20Series%20Controller%2C%20CR800%20Series%20Controller%20Ethernet%20Function%20Instruction%20Manual&sort=0&style=0&lang=2&category1=0&filter_discontinued=0&filter_bundled=0) from [Robot Industrial/Collaborative Robot MELFA Manual](https://www.mitsubishielectric.com/fa/download/search.page?mode=manual&kisyu=/robot).
@@ -97,6 +105,15 @@ For connection guide, refer to [CR750/CR751 Series Controller, CR800 Series Cont
   <img src="./figures/robot_connect_usb_4_2.png" width="960" height="540">
 
 </br>
+
+4. Once connected to the robot, select __Online__ &rArr; __Communication Parameter__ &rArr; __Ethernet__. In the new window, select __Realtime Monitor__, ensure that __MONMODE__ is checked. Input port numbers for __Receive Port__ and __Send Port__ as shown in the images below.
+
+</br>
+  <img src="./figures/rtmon_ip_online.png" width="960" height="540">
+
+</br>
+
+Refer to [CR750/CR751 Series Controller, CR800 Series Controller Ethernet Function Instruction Manual](https://www.mitsubishielectric.com/fa/download/search.page?mode=manual&kisyu=/robot&q=CR750%2FCR751%20Series%20Controller%2C%20CR800%20Series%20Controller%20Ethernet%20Function%20Instruction%20Manual&sort=0&style=0&lang=2&category1=0&filter_discontinued=0&filter_bundled=0) from [Robot Industrial/Collaborative Robot MELFA Manual](https://www.mitsubishielectric.com/fa/download/search.page?mode=manual&kisyu=/robot) to setup __Real Time Monitoring Function__
 
 ## __4. Verifying Local IP address on Ubuntu 22.04LTS__
 
@@ -129,7 +146,7 @@ ros2 launch melfa_mon_bringup mon_control.launch.py controller_type:="R" robot_i
 
 ### Other guides:
 - [Home page](./../README.md)
-- [MELFA ROS2 user guide](./melfa_ros2_driver.md) : Usage and Installation of MELFA ROS2.
+- [MELFA ROS2 user guide](./melfa_ros2_monitor.md) : Usage and Installation of MELFA ROS2.
 - [RT Toolbox3 Setup](./rt_toolbox3_setup.md) : Create your first RT Toolbox3 Project File for ROS2.
 - [RT Toolbox3 Simulator Setup](./rt_sim_setup.md) : Connect to RT Toolbox3 simulator as if it is a real robot.
 - [RT Toolbox3 Real Robot Setup](./rt_real_setup.md): Connect to a MELFA robot.
