@@ -85,6 +85,7 @@ private:
   // communication API
   std::unique_ptr<MelfaEthernet::rtmon> api_wrap_;
   uint8_t packet_lost_log;
+  uint8_t scara;
   uint8_t joint_broadcaster_toggle;
 
   bool execution_init_;

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:macro name="monitor_hardware" params="name prefix robot_model robot_ip send_port recv_port packet_lost_log  controller_config controller_type joint_broadcaster">
+    <xacro:macro name="monitor_hardware" params="name prefix robot_model robot_ip send_port recv_port packet_lost_log  controller_config controller_type joint_broadcaster scara">
         <xacro:property name="ctrl_limits" value="${xacro.load_yaml(controller_config)['controller_limits']}"/>
         <xacro:property name="ctrl_mode" value="${xacro.load_yaml(controller_config)['control_mode_io']}"/>
         <xacro:property name="data_queue" value="${xacro.load_yaml(controller_config)['data_queue']}"/>
@@ -16,6 +16,7 @@
                 <param name="recv_port">${recv_port}</param>
                 <param name="packet_lost_log">${packet_lost_log}</param>
                 <param name="joint_broadcaster">${joint_broadcaster}</param>
+                <param name="scara">${scara}</param>
                  <!-- Controller Type R/Q/D -->
                 <param name="controller_type">${controller_type}</param>
                 <!-- Limits of IO with respect to controller_type -->
@@ -37,7 +38,7 @@
             </hardware>
 
             <xacro:if value="${joint_broadcaster}">
-                <joint name="${prefix}${robot_model}${robot_model}joint_1">
+                <joint name="${prefix}${robot_model}joint_1">
                     <state_interface name="position"/>
                     <state_interface name="velocity"/>
                     <state_interface name="ampere_rms"/>
