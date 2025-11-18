@@ -11,6 +11,7 @@
     <xacro:arg name="controller_config" default="custom_monitor_params.yaml" />
     <xacro:arg name="packet_lost_log" default="1" />
     <xacro:arg name="joint_broadcaster" default="true" />
+    <xacro:arg name="scara" default="0" />
 
     <!-- Import ros2_control description -->
     <xacro:include filename="$(find melfa_mon_description)/ros2_control/monitor.hardware.xacro" />
@@ -19,6 +20,7 @@
         name="$(arg robot_model)" 
         prefix="$(arg prefix)"
         robot_model="$(arg robot_model)" 
+        scara="$(arg scara)" 
         robot_ip="$(arg robot_ip)" 
         send_port="$(arg send_port)"
         recv_port="$(arg recv_port)"

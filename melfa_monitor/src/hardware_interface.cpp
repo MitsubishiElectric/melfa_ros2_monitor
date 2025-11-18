@@ -275,6 +275,7 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
   api_wrap_->robot_ip.sendport = stoi(info_.hardware_parameters["send_port"]);
   api_wrap_->robot_ip.recvport = stoi(info_.hardware_parameters["recv_port"]);
   packet_lost_log = stoi(info_.hardware_parameters["packet_lost_log"]);
+  scara = stoi(info_.hardware_parameters["scara"]);
   api_wrap_->create_port();
 
   api_wrap_->cmd_pack.cmd_type = MON_CMD_START;                   // set start command
@@ -311,6 +312,9 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
     joint_position_states_[0] = api_wrap_->fb_pack.jnt_EFB.j1;
     joint_position_states_[1] = api_wrap_->fb_pack.jnt_EFB.j2;
     joint_position_states_[2] = api_wrap_->fb_pack.jnt_EFB.j3;
+    if(scara==1){
+        joint_position_states_[2]/=1000.0; // SCARA robot type correction. mm to m.
+    }
     joint_position_states_[3] = api_wrap_->fb_pack.jnt_EFB.j4;
     joint_position_states_[4] = api_wrap_->fb_pack.jnt_EFB.j5;
     joint_position_states_[5] = api_wrap_->fb_pack.jnt_EFB.j6;
@@ -742,6 +746,9 @@ hardware_interface::return_type MELFAMonitorHardwareInterface::read(const rclcpp
     joint_position_states_[0] = api_wrap_->fb_pack.jnt_EFB.j1;
     joint_position_states_[1] = api_wrap_->fb_pack.jnt_EFB.j2;
     joint_position_states_[2] = api_wrap_->fb_pack.jnt_EFB.j3;
+    if(scara==1){
+        joint_position_states_[2]/=1000.0; // SCARA robot type correction. mm to m.
+    }
     joint_position_states_[3] = api_wrap_->fb_pack.jnt_EFB.j4;
     joint_position_states_[4] = api_wrap_->fb_pack.jnt_EFB.j5;
     joint_position_states_[5] = api_wrap_->fb_pack.jnt_EFB.j6;

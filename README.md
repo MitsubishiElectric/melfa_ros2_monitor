@@ -9,7 +9,6 @@ MELFA ROS2 Monitor exposes MELFA runtime parameters and states to be read from R
 </br>
 
 [![ROS2 demo](https://markdown-videos.vercel.app/youtube/RP6lIamz9-8?si=v53JdDJ4vaFBPd5M)](https://youtu.be/RP6lIamz9-8?si=v53JdDJ4vaFBPd5M)
-[![MEAU demo](https://markdown-videos.vercel.app/youtube/Ks6ji6kw68c?si=KCWWB8-P_m3ofB4V)](https://youtu.be/Ks6ji6kw68c?si=KCWWB8-P_m3ofB4V)
 - [Learn more](https://www.mitsubishielectric.com/fa/products/rbt/robot/index.html)
 - [Robot catalog](https://www.mitsubishielectric.com/app/fa/download/search.do?kisyu=/robot&mode=catalog)
 
@@ -58,7 +57,7 @@ MELFA ROS2 Monitor consists of five components:
 MELFA ROS2 Driver is designed to interface CR800 robot controllers with the ROS2 so that developers can leverage the contributions from the Open Source Community with an industry proven robot platform. Please select a guide below to get started.
 </br>
 
-- [MELFA ROS2 user guide](./doc/melfa_ros2_driver.md) : Usage and Installation of MELFA ROS2.
+- [MELFA ROS2 user guide](./doc/melfa_ros2_monitor.md) : Usage and Installation of MELFA ROS2.
 - [RT Toolbox3 Setup](./doc/rt_toolbox3_setup.md) : Create your first RT Toolbox3 Project File for ROS2.
 - [RT Toolbox3 Simulator Setup](./doc/rt_sim_setup.md) : Connect to RT Toolbox3 simulator as if it is a real robot.
 - [RT Toolbox3 Real Robot Setup](./doc/rt_real_setup.md): Connect to a MELFA robot.
@@ -74,6 +73,6 @@ MELFA ROS2 Driver is designed to interface CR800 robot controllers with the ROS2
 <div> </div>
 
 ## __5. Contact us / Technical support__
-More Support & Service, please contact us [@MEAP](https://sg.mitsubishielectric.com/fa/en/contact.html) &#9743;. For contributing and reporting, refer to [this](./CONTRIBUTING.md) for development related enquiries.
+More Support & Service, please contact us on [github](https://github.com/Mitsubishi-Electric-Asia/). For contributing and reporting, refer to [this](./CONTRIBUTING.md) for development related enquiries.
 
 <div> </div>

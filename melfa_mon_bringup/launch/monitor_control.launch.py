@@ -143,6 +143,13 @@ def generate_launch_description():
             description='Toggle joint_state_broadcaster',
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            'scara',
+            default_value='0',
+            description='Toggle joint_state_broadcaster',
+        )
+    )
     # Initialize Arguments
     namespace = LaunchConfiguration("namespace")
     prefix = LaunchConfiguration("prefix")
@@ -158,6 +165,7 @@ def generate_launch_description():
     recv_port = LaunchConfiguration('recv_port')
     controller_type = LaunchConfiguration('controller_type')
     packet_lost_log = LaunchConfiguration('packet_lost_log')
+    scara = LaunchConfiguration('scara')
 
     controller_config = LaunchConfiguration('controller_config')
     
@@ -206,6 +214,9 @@ def generate_launch_description():
             ' ',
             "joint_broadcaster:=",
             joint_broadcaster,
+            ' ',
+            "scara:=",
+            scara,
         ]
     )
     robot_description = {'robot_description': robot_description_content}
