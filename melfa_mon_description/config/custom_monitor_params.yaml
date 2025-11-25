@@ -53,48 +53,21 @@ control_mode_io:
   io_mode: "1111111111"
 
 # Refer to table below to select your data for data_queue:
-# 0   | no data
-# 1   | XYZ position (Command) *Angle in radians
-# 2   | Joint position (Command) *Angle in radians
-# 3   | Motor pulse position (Command)
+# Please choose from the following data items, and set their IDs in data_queue section
+
 # 7   | XYZ position (Feedback) *Angle in radians
 # 8   | Joint position (Feedback) *Angle in radians
-# 9   | Motor pulse position (Feedback)
-# 10  | Current command [0.1% rate]
-# 11  | Current feedback [0.1% rate]
-# 12  | Robot informationData structure
-# 13  | Position droop
-# 14  | Speed (Command) [rpm]
 # 15  | Speed (Feedback) [rpm]
-# 16  | Axis load level [%]
-# 17  | Encoder temperature [°C]
-# 18  | Encoder miscount
-# 19  | Motor voltage [V]
-# 20  | Regeneration level [%]
-# 21  | Tolerable command + [0.1% rate]
-# 22  | Tolerable command - [0.1% rate]
-# 23  | RMS current [0.1% rate]
 # 101 | Force sensor current position xyz[N]abc[Nm]
 # 102 | Force sensor original data (after offset cancel) xyz[N]abc[Nm]
 # 103 | Force sensor original data (before offset cancel) xyz[N]abc[Nm]
-# 104 | Position command of the force sensor correction
-# 111 | COL presumed torque [0.1% rate]
-# 112 | COL threshold + [0.1% rate]
-# 113 | COL threshold - [0.1% rate]
-# 1001| XYZ position (Command) *Angle in degrees
-# 1002| Joint position (Command) *Angle in degrees
-# 1007| XYZ position (Feedback) *Angle in degrees
-# 1008| Joint position (Feedback) *Angle in degrees
-# 1010| Current command [Arms]
 # 1011| Current feedback [Arms]
-# 1012| Tolerable command + [Arms]
-# 1013| Tolerable command - [Arms]
-# 1014| RMS current [Arms]
+
 
 data_queue:
   data_1_queue: 101
   data_2_queue: 103
-  data_3_queue: 7, 18, 17 ,19
-  data_4_queue: 8, 15, 1011
+  data_3_queue: 7
+  data_4_queue: 8
 
 
