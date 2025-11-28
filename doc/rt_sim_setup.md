@@ -23,8 +23,10 @@ This section will guide you to find your local IP address on your Windows device
     <img src="./figures/local_ip_final.png" width="960" height="540">
 
 3. Ensure that RT ToolBox3 is __offline__. Select __offline__ -> __Parameter__ -> __Communication Parameter__. Double click on __Ethernet__. In the new window, select __Realtime Monitor__, ensure that MONMODE is checked. Input the port numbers  as shown in the image.
-
     <img src="./figures/rtmon_ip_offline.png" width="960" height="540">
+
+>Note: If you are monitoring more than one robot on the same Ubuntu machine, each additional robot must use ports offset by +100 from the previous one.
+For example, the second robot should use 12100 for the Receive Port and 12101 for the Send Port.
 
 4. Select __Simulator__ to launch __RT ToolBox3 simulator__.
 

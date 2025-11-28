@@ -44,7 +44,7 @@
 
     ```bash
     cd ~/melfa_ws
-    rosdep install -r --from-paths . --ignore-src --rosdistro humble -y --skip-keys warehouse_ros_mongo
+    rosdep install -r --from-paths . --ignore-src --rosdistro humble -y
     ```
 
 4. Build the packages
