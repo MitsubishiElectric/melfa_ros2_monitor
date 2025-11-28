@@ -3,12 +3,11 @@
 # __MELFA ROS2 Monitor Usage and Installation__
 
 ## Index
-
-1. Installation  
-2. Launch MELFA ROS2 Monitor  
-3. Robot Data Monitoring  
-4. Robot IO Monitoring 
-5. Conclusion
+[1. Installation](#1-installation)  
+[2. Launch MELFA ROS2 Monitor](#2-launch-melfa-ros2-monitor)  
+[3. Robot Data Monitoring](#3-robot-data-monitoring)  
+[4. Robot I/O Monitoring](#4-robot-io-monitoring)  
+[5. Conclusion](#5-conclusion)  
 
 ## __1. Installation__
 
@@ -17,53 +16,53 @@
 ### __Build and Install__
 
 1. Create your MELFA workspace
-   
-   ```bash
-   mkdir -p ~/melfa_ws/src
-   cd ~/melfa_ws/src
-   source /opt/ros/humble/setup.bash
-   ```
-   
-   Download [MELFA ROS2 Monitor](https://github.com/Mitsubishi-Electric-Asia/melfa_ros2_monitor/releases) from the repository and extract it into your working directory.
 
-Or you can clone the repository
+    ```bash
+    mkdir -p ~/melfa_ws/src
+    cd ~/melfa_ws/src
+    source /opt/ros/humble/setup.bash
+    ```
 
-```bash
-git clone -b humble https://github.com/Mitsubishi-Electric-Asia/melfa_ros2_monitor.git
-```
+    Download [MELFA ROS2 Monitor](https://github.com/Mitsubishi-Electric-Asia/melfa_ros2_monitor/releases) from the repository and extract it into your working directory.
 
-> Note: only the release tag versions are tested.
+    Or you can clone the repository
+
+    ```bash
+    git clone -b humble https://github.com/Mitsubishi-Electric-Asia/melfa_ros2_monitor.git
+    ```
+
+    > Note: only the release tag versions are tested.
 
 2. Update package dependency sources
 
-```bash
-cd ~/melfa_ws
-rosdep update
-```
+    ```bash
+    cd ~/melfa_ws
+    rosdep update
+    ```
 
 3. Install dependencies
 
-```bash
-cd ~/melfa_ws
-rosdep install -r --from-paths . --ignore-src --rosdistro humble -y --skip-keys warehouse_ros_mongo
-```
+    ```bash
+    cd ~/melfa_ws
+    rosdep install -r --from-paths . --ignore-src --rosdistro humble -y --skip-keys warehouse_ros_mongo
+    ```
 
 4. Build the packages
 
-```bash
-cd ~/melfa_ws
-colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
-```
+    ```bash
+    cd ~/melfa_ws
+    colcon build --cmake-args -DCMAKE_BUILD_TYPE=Release
+    ```
 
 5. Remember to source the workspace
 
-```bash
-source install/setup.bash
-```
+    ```bash
+    source install/setup.bash
+    ```
 
 ## __2. Launch MELFA ROS2 Monitor__
 
-You require a [real robot](./rt_real_setup.md) or [RT Toolbox3 simulator](./rt_sim_setup.md) to proceed. If you have not created your RT ToolBox3 project file, refer to [this guide](./rt_toolbox3_setup.md)
+You require a [real robot](./rt_real_setup.md) or [RT ToolBox3 simulator](./rt_sim_setup.md) to proceed. If you have not created your RT ToolBox3 project file, refer to [this guide](./rt_toolbox3_setup.md)
 
 </div>
 
@@ -144,11 +143,11 @@ Below are the steps for the configuration:
 
 Some points to be aware of:
 
-- The MELFA ROS2 Monitor is based on UDP connection, which may be affected by other network traffic. However, during testing, the 3.5 ms monitoring cycle is handled easily on non–real-time Linux systems with modern hardware.
+- The MELFA ROS2 Monitor is based on UDP connection, which may be affected by other network traffic. 
 
 - The numbering of the queues does not mean the order of arrival — all four data streams are sent **synchronously**.
 
-## __4. Robot IO Monitoring__
+## __4. Robot I/O Monitoring__
 
 This section will guide you through a simple demo of melfa_io_controllers using RT ToolBox3 simulator.
 
@@ -162,146 +161,148 @@ Before we go into ROS 2 interfaces, some familiarity with Mitsubishi Electric's 
 
 On a side note, the `general1_io` and `general2_io` are set to the same source as __General1__ and __General2__ in RT ToolBox3.
 
-### __4.2 I/O Controller Demo: Enable/Disable IO interface__
+### __4.2 I/O Controller Demo: Enable/Disable I/O interface__
 
-In this demo, we will be showing some basic operation with io_controls, including viewing the enabled IO interfaces, enable/disable IO interfaces, and examining the contents of any `io_interface`. 
+In this demo, we will be showing some basic operation with io_controls, including viewing the enabled I/O interfaces, enable/disable I/O interfaces, and examining the contents of any `io_interface`. 
 
-1. Start by launching the MELFA ROS 2 Monitor.
+1. Start by launching the MELFA ROS2 Monitor.
    In this example, we use a real robot controller of type "R".
    ⚠ Note: The GPIO address ranges differ between CR800-R, CR800-Q and CR800-D controllers, so the I/O interface addresses shown in this demo may not match your controller exactly.
 
-```bash
-# Terminal 1
+    ```bash
+    # Terminal 1
 
-ros2 launch melfa_mon_bringup monitor_control.launch.py use_fake_hardware:=false controller_type:="R" robot_ip:=192.168.3.100
-```
+    ros2 launch melfa_mon_bringup monitor_control.launch.py use_fake_hardware:=false controller_type:="R" robot_ip:=192.168.3.100
+    ```
 
-2. For __viewing the enabled IO interfaces__.
+2. For __viewing the enabled I/O interfaces__.
 
-```bash
-ros2 topic echo /gpio_controller/io_control_mode
-```
+    ```bash
+    ros2 topic echo /gpio_controller/io_control_mode
+    ```
 
-3. You can __enable/disable desired IO interfaces__ using the provided ROS 2 Service like below. By default, all interfaces are enabled.
+3. You can __enable/disable desired I/O interfaces__ using the provided ROS 2 Service like below. By default, all interfaces are enabled.
 
-```bash
-# Terminal 2
+    ```bash
+    # Terminal 2
 
-ros2 service call /io_mon_controller/configure_io_monitor_mode melfa_mon_msgs/srv/ModeConfigure "{general1_io_interface: true, general2_io_interface: true, user1_io_interface: true, user2_io_interface: true, user3_io_interface: true, user4_io_interface: true, user5_io_interface: true, user6_io_interface: true, user7_io_interface: true, user8_io_interface: true,}"
-```
+    ros2 service call /io_mon_controller/configure_io_monitor_mode melfa_mon_msgs/srv/ModeConfigure "{general1_io_interface: true, general2_io_interface: true, user1_io_interface: true, user2_io_interface: true, user3_io_interface: true, user4_io_interface: true, user5_io_interface: true, user6_io_interface: true, user7_io_interface: true, user8_io_interface: true,}"
+    ```
 
-To verify the result, run the command below.
+    To verify the result, run the command below.
 
-```bash
-# Terminal 3
+    ```bash
+    # Terminal 3
 
-ros2 topic echo /io_mon_controller/io_monitor_mode
-```
+    ros2 topic echo /io_mon_controller/io_monitor_mode
+    ```
 
-You should observe the following console prints.
+    You should observe the following console prints.
 
-```bash
-# Terminal 3
+    ```bash
+    # Terminal 3
 
----
-general1_io_interface: true
-general2_io_interface: true
-user1_io_interface: true
-user2_io_interface: true
-user3_io_interface: true
-user4_io_interface: true
-user5_io_interface: true
-user6_io_interface: true
-user7_io_interface: true
-user8_io_interface: true
----
-```
+    ---
+    general1_io_interface: true
+    general2_io_interface: true
+    user1_io_interface: true
+    user2_io_interface: true
+    user3_io_interface: true
+    user4_io_interface: true
+    user5_io_interface: true
+    user6_io_interface: true
+    user7_io_interface: true
+    user8_io_interface: true
+    ---
+    ```
 
+### **4.3 I/O Controller Demo: Customize I/O interface Through ROS 2 Service**
 
+There are 8 user I/O interfaces in MELFA ROS2 Monitor, user can map them to GPIO address they desired to, other than ROS 2 Service that is discussed here, user can also change them in `melfa_mon_description/config/custom_monitor_params.yaml`, and build the workspace again to apply the address change. 
 
-### **4.3 I/O Controller Demo: Customize IO interface Through ROS 2 Service**
+1. To configure user I/O address, you can use the `configure_io_monitor_address` service.
 
-There are 8 user IO interfaces in MELFA ROS2 Monitor, user can map them to GPIO address they desired to, other than ROS 2 Service that is discussed here, user can also change them in `melfa_mon_description/config/custom_monitor_params.yaml`, and build the workspace again to apply the address change. 
+    Run the command below to verify the contents of user1_io_state:    
 
+    ```bash
+    # Terminal 3
 
+    ros2 topic echo /io_mon_controller/user1_io_state 
+    ```
 
-1. To configure user IO address, you can use the `configure_io_monitor_address` service.
+    Observe the following. 11024 is the default starting address for user1_io_state interface.
 
-        Run the command below to verify the contents of user1_io_state:    
+    ```bash
+    # Terminal 3
 
-```
-# Terminal 3
-
-ros2 topic echo /io_mon_controller/user1_io_state 
-```
-
-        Observe the following. 11024 is the default starting address for user1_io_state interface.
-
-```
-# Terminal 3
-
----
-interface_name: User1 IO State
-input_addrr: 11024
-output_addrr: 11024
-input_data: 0
-output_data: 0
----
-```
-
-The ROS 2  service format is as below:
-
-```
-# Fields Required
-uint16 input_addrr
-uint16 output_addrr
----
-bool success
-```
-
-| Parameter    | Description                 |
-| ------------ | --------------------------- |
-| input_addrr  | Address of first input bit  |
-| output_addrr | Address of first output bit |
+    ---
+    interface_name: User1 IO State
+    input_addrr: 11024
+    output_addrr: 11024
+    input_data: 0
+    output_data: 0
+    ---
+    ```
 
 2. Run the command below to use the service.
 
-```
-# Terminal 2
+    ```bash
+    # Terminal 2
 
-ros2 service call /io_mon_controller/configure_io_monitor_address melfa_mon_msgs/srv/GpioConfigure "{input_addrr: 11025, output_addrr: 11025}"
-```
+    ros2 service call /io_mon_controller/configure_io_monitor_address melfa_mon_msgs/srv/GpioConfigure "{input_addrr: 11025, output_addrr: 11025}"
+    ```
+    The ROS 2 service format is as below:
+
+    ```
+    # Fields Required
+    uint16 input_addrr
+    uint16 output_addrr
+    ---
+    bool success
+    ```
+
+    | Parameter    | Description                 |
+    | ------------ | --------------------------- |
+    | input_addrr  | Address of first input bit  |
+    | output_addrr | Address of first output bit |
 
 3. Run the command below to observe the changes.
+    ```bash
+    # Terminal 3
 
-```
-# Terminal 3
+    ros2 topic echo /io_mon_controller/user1_io_state 
+    ```
 
----
-interface_name: User1 IO State
-input_addrr: 11025
-output_addrr: 11025
-input_data: 0
-output_data: 0
----
-```
+    ```bash
+    # Terminal 3
+
+    ---
+    interface_name: User1 IO State
+    input_addrr: 11025
+    output_addrr: 11025
+    input_data: 0
+    output_data: 0
+    ---
+    ```
 
 ## __5. Conclusion__
 
 You have now completed the installation and learned how to:
 
-- Launch the MELFA ROS2 Monitor with a real robot or RT Toolbox3 simulator
+- Launch the MELFA ROS2 Monitor with a real robot or RT ToolBox3 simulator
 - Configure and monitor real-time robot data
 - Monitor and customize robot GPIO interfaces
 
 
 
-### Other guides:
+## Other guides:
 
-1. Install and configure MELFA ROS2 Monitor.
-   - [MELFA ROS2 Monitor user guide](./doc/melfa_ros2_monitor.md) : Usage and Installation of MELFA ROS2 Monitor.
-2. Create an RT Toolbox3 project.
-   - [RT ToolBox3 Setup](./doc/rt_toolbox3_setup.md) : Create your first RT ToolBox3 Project File for MELFA ROS2 Monitor.
-3. Choose your development environment.
-   - [RT ToolBox3 Simulator Setup](./doc/rt_sim_setup.md) : Connect to RT ToolBox3 simulator in place of real robots for MELFA ROS2 Monitor.
-   - [RT ToolBox3 Real Robot Setup](./doc/rt_real_setup.md): Connect to a MELFA robot for MELFA ROS2 Monitor.
+- Install and configure MELFA ROS2 Monitor.
+  - [MELFA ROS2 Monitor user guide](./melfa_ros2_monitor.md) : Usage and Installation of MELFA ROS2 Monitor.
+
+- Create an RT ToolBox3 project.
+  - [RT ToolBox3 Setup](./rt_toolbox3_setup.md) : Create your first RT ToolBox3 Project File for MELFA ROS2 Monitor.
+
+- Choose your development environment.
+  - [RT ToolBox3 Simulator Setup](./rt_sim_setup.md) : Connect to RT ToolBox3 simulator in place of real robots for MELFA ROS2 Monitor.
+  - [RT ToolBox3 Real Robot Setup](./rt_real_setup.md): Connect to a MELFA robot for MELFA ROS2 Monitor.
