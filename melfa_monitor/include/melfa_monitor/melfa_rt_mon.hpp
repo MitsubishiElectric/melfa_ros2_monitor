@@ -113,7 +113,7 @@ protected:
 
   /**
    * @brief counts the number of packets sent
-   * 
+   *
    */
   uint64_t counter_;
 
@@ -436,7 +436,7 @@ protected:
     FLOAT8 curr_fb_arms;
 
     /**
-     * @brief Tolerbable command +. \
+     * @brief Tolerable command +. \
      * @brief Data from MON_TYP_TOL_CMD_UPPER_ARMS\
      * @brief[Arms]
      *
@@ -444,7 +444,7 @@ protected:
     FLOAT8 tol_cmd_upper_arms;
 
     /**
-     * @brief Tolerbable command -. \
+     * @brief Tolerable command -. \
      * @brief Data from MON_TYP_TOL_CMD_LOWER_ARMS\
      * @brief[Arms]
      *
@@ -547,7 +547,6 @@ protected:
   } ip_settings;
 
 public:
-
   /**
    * @brief timeout value
    */
@@ -566,7 +565,7 @@ public:
   int packet_recv_lost;
 
   /**
-   * @brief set robot controller clock cycle period. To calculate resolution for receving packets.
+   * @brief set robot controller clock cycle period. To calculate resolution for receiving packets.
    *
    */
   float period = 3.5;

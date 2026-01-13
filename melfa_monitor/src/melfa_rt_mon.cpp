@@ -57,11 +57,11 @@ int rtmon::create_port()
   robot_ip.send_destSockAddr.sin_port = htons(robot_ip.sendport);  // set port number
   robot_ip.send_destSockAddr.sin_family = AF_INET;                 // set standard struct
 
-  if(robot_ip.recvport!=0)
+  if (robot_ip.recvport != 0)
   {
-  robot_ip.recv_destSockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-  robot_ip.recv_destSockAddr.sin_port = htons(robot_ip.recvport);  // set port number
-  robot_ip.recv_destSockAddr.sin_family = AF_INET;                 // set standard struct
+    robot_ip.recv_destSockAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    robot_ip.recv_destSockAddr.sin_port = htons(robot_ip.recvport);  // set port number
+    robot_ip.recv_destSockAddr.sin_family = AF_INET;                 // set standard struct
   }
 
   bind(robot_ip.destSocket, (struct sockaddr*)&robot_ip.recv_destSockAddr, sizeof(robot_ip.recv_destSockAddr));
@@ -173,7 +173,7 @@ int rtmon::WriteToRobot_MON_()
           std::cout << "Axis load level\n";
           break;
         case MON_TYP_ENC_TEMP:
-          std::cout << "Encoder temperture\n";
+          std::cout << "Encoder temperature\n";
           break;
         case MON_TYP_ENC_MIS:
           std::cout << "Encoder miscount\n";
@@ -182,7 +182,7 @@ int rtmon::WriteToRobot_MON_()
           std::cout << "Motor voltage\n";
           break;
         case MON_TYP_REGEN_LVL:
-          std::cout << "Rgeneration Level\n";
+          std::cout << "Regeneration Level\n";
           break;
         case MON_TYP_TOL_CMD_UPPER:
           std::cout << "Tolerable command +\n";
@@ -1336,7 +1336,7 @@ int rtmon::print_monitored_feedback()
 #if _WIN32
                   sprintf_s(
 #endif
-                      console_msg, "POSE Commmand Feedback: x= %f, y= %f, z= %f, a= %f, b= %f, c= %f, l1= %f, l2= %f, sflg1= %d, sflg2= %d\n",
+                      console_msg, "POSE Command Feedback: x= %f, y= %f, z= %f, a= %f, b= %f, c= %f, l1= %f, l2= %f, sflg1= %d, sflg2= %d\n",
                             fb_pack.pos_FB.x,
                             fb_pack.pos_FB.y,
                             fb_pack.pos_FB.z,

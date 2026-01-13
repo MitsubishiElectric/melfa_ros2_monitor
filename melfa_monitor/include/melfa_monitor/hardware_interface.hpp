@@ -96,7 +96,7 @@ private:
   std::vector<double> joint_velocity_states_;
   std::vector<double> joint_ampere_rms_states_;
   std::vector<double> joint_current_rate_states_;
-  std::vector<double> joint_encoder_misscount_states_;
+  std::vector<double> joint_encoder_miscount_states_;
   std::vector<double> joint_encoder_temperature_states_;
   std::vector<double> motor_voltage_states_;
   std::vector<double> fts_curr_states_;

@@ -50,14 +50,6 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "robot_model",
-            default_value="",
-            description="Namespace of controller manager and controllers. This is useful for \
-        multi-robot scenarios.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
             'runtime_config_package',
             default_value='melfa_mon_description',
             description='Package with the controller\'s configuration in "config" folder. \

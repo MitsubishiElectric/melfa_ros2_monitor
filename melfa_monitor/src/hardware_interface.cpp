@@ -124,7 +124,7 @@ MELFAMonitorHardwareInterface::on_init(const hardware_interface::HardwareInfo& s
     joint_position_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     joint_velocity_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     joint_ampere_rms_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
-    joint_encoder_misscount_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
+    joint_encoder_miscount_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     joint_encoder_temperature_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
     motor_voltage_states_.resize(info_.joints.size(), std::numeric_limits<double>::quiet_NaN());
   }
@@ -171,11 +171,11 @@ MELFAMonitorHardwareInterface::on_init(const hardware_interface::HardwareInfo& s
       return hardware_interface::CallbackReturn::ERROR;
     }
 
-    if (joint.state_interfaces[3].name != "encoder_misscount")
+    if (joint.state_interfaces[3].name != "encoder_miscount")
     {
       RCLCPP_FATAL(rclcpp::get_logger("MELFAMonitorHardwareInterface"),
-                   "Joint '%s' have %s encoder_misscount interface as forth state interface. '%s' expected.",
-                   joint.name.c_str(), joint.state_interfaces[3].name.c_str(), "encoder_misscount");
+                   "Joint '%s' have %s encoder_miscount interface as forth state interface. '%s' expected.",
+                   joint.name.c_str(), joint.state_interfaces[3].name.c_str(), "encoder_miscount");
       return hardware_interface::CallbackReturn::ERROR;
     }
 
@@ -281,7 +281,7 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
   api_wrap_->cmd_pack.cmd_type = MON_CMD_START;                   // set start command
   *(api_wrap_->cmd_pack.mon_dat) = dat1_queue_[dat1_count_];      // set first feedback
   *(api_wrap_->cmd_pack.mon_dat + 1) = dat2_queue_[dat2_count_];  // set second feedback
-  *(api_wrap_->cmd_pack.mon_dat + 2) = dat3_queue_[dat3_count_];  // set thrid feedback
+  *(api_wrap_->cmd_pack.mon_dat + 2) = dat3_queue_[dat3_count_];  // set third feedback
   *(api_wrap_->cmd_pack.mon_dat + 3) = dat4_queue_[dat4_count_];  // set forth feedback
 
   // Initialize external control in robot controller.
@@ -312,8 +312,9 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
     joint_position_states_[0] = api_wrap_->fb_pack.jnt_EFB.j1;
     joint_position_states_[1] = api_wrap_->fb_pack.jnt_EFB.j2;
     joint_position_states_[2] = api_wrap_->fb_pack.jnt_EFB.j3;
-    if(scara==1){
-        joint_position_states_[2]/=1000.0; // SCARA robot type correction. mm to m.
+    if (scara == 1)
+    {
+      joint_position_states_[2] /= 1000.0;  // SCARA robot type correction. mm to m.
     }
     joint_position_states_[3] = api_wrap_->fb_pack.jnt_EFB.j4;
     joint_position_states_[4] = api_wrap_->fb_pack.jnt_EFB.j5;
@@ -339,14 +340,14 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
     joint_ampere_rms_states_[6] = api_wrap_->fb_pack.curr_fb_arms.f7;
     joint_ampere_rms_states_[7] = api_wrap_->fb_pack.curr_fb_arms.f8;
 
-    joint_encoder_misscount_states_[0] = api_wrap_->fb_pack.enc_mis.m1;
-    joint_encoder_misscount_states_[1] = api_wrap_->fb_pack.enc_mis.m2;
-    joint_encoder_misscount_states_[2] = api_wrap_->fb_pack.enc_mis.m3;
-    joint_encoder_misscount_states_[3] = api_wrap_->fb_pack.enc_mis.m4;
-    joint_encoder_misscount_states_[4] = api_wrap_->fb_pack.enc_mis.m5;
-    joint_encoder_misscount_states_[5] = api_wrap_->fb_pack.enc_mis.m6;
-    joint_encoder_misscount_states_[6] = api_wrap_->fb_pack.enc_mis.m7;
-    joint_encoder_misscount_states_[7] = api_wrap_->fb_pack.enc_mis.m8;
+    joint_encoder_miscount_states_[0] = api_wrap_->fb_pack.enc_mis.m1;
+    joint_encoder_miscount_states_[1] = api_wrap_->fb_pack.enc_mis.m2;
+    joint_encoder_miscount_states_[2] = api_wrap_->fb_pack.enc_mis.m3;
+    joint_encoder_miscount_states_[3] = api_wrap_->fb_pack.enc_mis.m4;
+    joint_encoder_miscount_states_[4] = api_wrap_->fb_pack.enc_mis.m5;
+    joint_encoder_miscount_states_[5] = api_wrap_->fb_pack.enc_mis.m6;
+    joint_encoder_miscount_states_[6] = api_wrap_->fb_pack.enc_mis.m7;
+    joint_encoder_miscount_states_[7] = api_wrap_->fb_pack.enc_mis.m8;
 
     joint_encoder_temperature_states_[0] = api_wrap_->fb_pack.enc_temp.m1;
     joint_encoder_temperature_states_[1] = api_wrap_->fb_pack.enc_temp.m2;
@@ -366,7 +367,6 @@ MELFAMonitorHardwareInterface::on_activate(const rclcpp_lifecycle::State& previo
     motor_voltage_states_[6] = api_wrap_->fb_pack.motor_v.m7;
     motor_voltage_states_[7] = api_wrap_->fb_pack.motor_v.m8;
 
-    
     RCLCPP_INFO(rclcpp::get_logger("MELFAMonitorHardwareInterface"), "Joint States Published!");
   }
 
@@ -520,8 +520,8 @@ std::vector<hardware_interface::StateInterface> MELFAMonitorHardwareInterface::e
     }
     for (uint i = 0; i < info_.joints.size(); i++)
     {
-      state_interfaces_.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "encoder_misscount",
-                                                                        &joint_encoder_misscount_states_[i]));
+      state_interfaces_.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "encoder_miscount",
+                                                                        &joint_encoder_miscount_states_[i]));
     }
     for (uint i = 0; i < info_.joints.size(); i++)
     {
@@ -530,8 +530,8 @@ std::vector<hardware_interface::StateInterface> MELFAMonitorHardwareInterface::e
     }
     for (uint i = 0; i < info_.joints.size(); i++)
     {
-      state_interfaces_.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "motor_voltage",
-                                                                        &motor_voltage_states_[i]));
+      state_interfaces_.emplace_back(
+          hardware_interface::StateInterface(info_.joints[i].name, "motor_voltage", &motor_voltage_states_[i]));
     }
   }
 
@@ -746,8 +746,9 @@ hardware_interface::return_type MELFAMonitorHardwareInterface::read(const rclcpp
     joint_position_states_[0] = api_wrap_->fb_pack.jnt_EFB.j1;
     joint_position_states_[1] = api_wrap_->fb_pack.jnt_EFB.j2;
     joint_position_states_[2] = api_wrap_->fb_pack.jnt_EFB.j3;
-    if(scara==1){
-        joint_position_states_[2]/=1000.0; // SCARA robot type correction. mm to m.
+    if (scara == 1)
+    {
+      joint_position_states_[2] /= 1000.0;  // SCARA robot type correction. mm to m.
     }
     joint_position_states_[3] = api_wrap_->fb_pack.jnt_EFB.j4;
     joint_position_states_[4] = api_wrap_->fb_pack.jnt_EFB.j5;
@@ -773,14 +774,14 @@ hardware_interface::return_type MELFAMonitorHardwareInterface::read(const rclcpp
     joint_ampere_rms_states_[6] = api_wrap_->fb_pack.curr_fb_arms.f7;
     joint_ampere_rms_states_[7] = api_wrap_->fb_pack.curr_fb_arms.f8;
 
-    joint_encoder_misscount_states_[0] = api_wrap_->fb_pack.enc_mis.m1;
-    joint_encoder_misscount_states_[1] = api_wrap_->fb_pack.enc_mis.m2;
-    joint_encoder_misscount_states_[2] = api_wrap_->fb_pack.enc_mis.m3;
-    joint_encoder_misscount_states_[3] = api_wrap_->fb_pack.enc_mis.m4;
-    joint_encoder_misscount_states_[4] = api_wrap_->fb_pack.enc_mis.m5;
-    joint_encoder_misscount_states_[5] = api_wrap_->fb_pack.enc_mis.m6;
-    joint_encoder_misscount_states_[6] = api_wrap_->fb_pack.enc_mis.m7;
-    joint_encoder_misscount_states_[7] = api_wrap_->fb_pack.enc_mis.m8;
+    joint_encoder_miscount_states_[0] = api_wrap_->fb_pack.enc_mis.m1;
+    joint_encoder_miscount_states_[1] = api_wrap_->fb_pack.enc_mis.m2;
+    joint_encoder_miscount_states_[2] = api_wrap_->fb_pack.enc_mis.m3;
+    joint_encoder_miscount_states_[3] = api_wrap_->fb_pack.enc_mis.m4;
+    joint_encoder_miscount_states_[4] = api_wrap_->fb_pack.enc_mis.m5;
+    joint_encoder_miscount_states_[5] = api_wrap_->fb_pack.enc_mis.m6;
+    joint_encoder_miscount_states_[6] = api_wrap_->fb_pack.enc_mis.m7;
+    joint_encoder_miscount_states_[7] = api_wrap_->fb_pack.enc_mis.m8;
 
     joint_encoder_temperature_states_[0] = api_wrap_->fb_pack.enc_temp.m1;
     joint_encoder_temperature_states_[1] = api_wrap_->fb_pack.enc_temp.m2;
@@ -826,9 +827,9 @@ hardware_interface::return_type MELFAMonitorHardwareInterface::read(const rclcpp
 
   tf2::Quaternion orientation;
   orientation.setRPY(api_wrap_->fb_pack.pos_EFB.a, api_wrap_->fb_pack.pos_EFB.b, api_wrap_->fb_pack.pos_EFB.c);
-  tcp_pose_states_[0] = api_wrap_->fb_pack.pos_EFB.x  / 1000.0;
-  tcp_pose_states_[1] = api_wrap_->fb_pack.pos_EFB.y  / 1000.0;
-  tcp_pose_states_[2] = api_wrap_->fb_pack.pos_EFB.z  / 1000.0;
+  tcp_pose_states_[0] = api_wrap_->fb_pack.pos_EFB.x / 1000.0;
+  tcp_pose_states_[1] = api_wrap_->fb_pack.pos_EFB.y / 1000.0;
+  tcp_pose_states_[2] = api_wrap_->fb_pack.pos_EFB.z / 1000.0;
   tcp_pose_states_[3] = orientation.x();
   tcp_pose_states_[4] = orientation.y();
   tcp_pose_states_[5] = orientation.z();
@@ -971,7 +972,7 @@ hardware_interface::return_type MELFAMonitorHardwareInterface::write(const rclcp
 
   *(api_wrap_->cmd_pack.mon_dat) = dat1_queue_[dat1_count_];      // set first feedback
   *(api_wrap_->cmd_pack.mon_dat + 1) = dat2_queue_[dat2_count_];  // set second feedback
-  *(api_wrap_->cmd_pack.mon_dat + 2) = dat3_queue_[dat3_count_];  // set thrid feedback
+  *(api_wrap_->cmd_pack.mon_dat + 2) = dat3_queue_[dat3_count_];  // set third feedback
   *(api_wrap_->cmd_pack.mon_dat + 3) = dat4_queue_[dat4_count_];  // set forth feedback
 
   // Interface selection based on Binary IO control mode

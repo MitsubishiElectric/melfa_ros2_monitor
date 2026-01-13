@@ -15,9 +15,9 @@
 # IO INTERFACE
 string interface_name
 ## Input Address
-uint16 input_addrr
+uint16 input_addr
 # Output Address
-uint16 output_addrr
+uint16 output_addr
 # INPUT DATA
 uint32 input_data
 # OUTPUT DATA

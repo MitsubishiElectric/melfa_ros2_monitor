@@ -29,16 +29,15 @@ Optional (recommended for development and testing):
 - Supports **2 General I/O ranges** + **8 User-defined I/O ranges**
 - Provides runtime data including:
 
-  
 | Data ID | Description                                           | Unit / Notes     |
 | ------: | ----------------------------------------------------- | ---------------- |
-|       7 | XYZ position (feedback)                               | xyz: m, abc: rad |
-|       8 | Joint position (feedback)                             | rad              |
-|      15 | Speed (feedback)                                      | rpm              |
-|     101 | Force sensor **current data**                     | xyz: N, abc: Nm  |
+|       7 | XYZ position (Feedback)                               | xyz: m, abc: rad |
+|       8 | Joint position (Feedback)                             | rad              |
+|      15 | Speed (Feedback)                                      | rpm              |
+|     101 | Force sensor **current data**                         | xyz: N, abc: Nm  |
 |     102 | Force sensor **original data (after offset cancel)**  | xyz: N, abc: Nm  |
 |     103 | Force sensor **original data (before offset cancel)** | xyz: N, abc: Nm  |
-|    1011 | Current feedback                                      | A                |
+|    1011 | Servo current (Feedback)                              | Arms             |
 
 >Note: As stated in overview, this package is a bridge between ROS 2 and MELFA's real-time monitoring function, please read the related chapter if you wish to learn more about the function. You can download the [CR750/CR751 Series Controller, CR800 Series Controller Ethernet Function Instruction Manual](https://www.mitsubishielectric.com/fa/download/search.page?mode=manual&kisyu=/robot&q=CR750%2FCR751%20Series%20Controller%2C%20CR800%20Series%20Controller%20Ethernet%20Function%20Instruction%20Manual&sort=0&style=0&lang=2&category1=0&filter_discontinued=0&filter_bundled=0) from [Robot Industrial/Collaborative Robot MELFA Manual](https://www.mitsubishielectric.com/fa/download/search.page?mode=manual&kisyu=/robot). Refer to chapter __3.4 Real-time monitor function__.
 

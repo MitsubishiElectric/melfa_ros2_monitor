@@ -13,7 +13,7 @@
 #    limitations under the License.
 
 controller_limits:
-  R: 
+  R:
     general1_io_limits: 10000, 10031 # U3En\HG0
     general2_io_limits: 10032, 10063 # U3En\HG1
     user1_io_limits: 11024, 11919 # U3En\HG32 ~ U3En\HG59
@@ -24,8 +24,8 @@ controller_limits:
     user6_io_limits: 15504, 16399 # U3En\HG172 ~ U3En\HG199
     user7_io_limits: 16400, 17295 # U3En\HG200 ~ U3En\HG227
     user8_io_limits: 17296, 18191 # U3En\HG228 ~ U3En\HG255
-  
-  Q: 
+
+  Q:
     general1_io_limits: 10000, 10031 # U3En\HG0
     general2_io_limits: 10032, 10063 # U3En\HG1
     user1_io_limits: 11024, 11919 # U3En\HG32 ~ U3En\HG59
@@ -36,8 +36,8 @@ controller_limits:
     user6_io_limits: 15504, 16399 # U3En\HG172 ~ U3En\HG199
     user7_io_limits: 16400, 17295 # U3En\HG200 ~ U3En\HG227
     user8_io_limits: 17296, 18191 # U3En\HG228 ~ U3En\HG255
-  
-  D: 
+
+  D:
     general1_io_limits: 10000, 10031 # U3En\HG0
     general2_io_limits: 10032, 10063 # U3En\HG1
     user1_io_limits: 11024, 12047 # U3En\HG32 ~ U3En\HG63
@@ -63,11 +63,8 @@ control_mode_io:
 # 103 | Force sensor original data (before offset cancel) xyz[N]abc[Nm]
 # 1011| Current feedback [Arms]
 
-
 data_queue:
   data_1_queue: 101
   data_2_queue: 103
   data_3_queue: 7
   data_4_queue: 8
-
-

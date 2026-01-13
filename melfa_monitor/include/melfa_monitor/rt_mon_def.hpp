@@ -155,49 +155,49 @@ typedef struct
 typedef struct
 {
   /**
-   * @brief Genneric int32
+   * @brief Generic int32
    *
    */
   int32_t m1;
   /**
-   * @brief Genneric int32
+   * @brief Generic int32
    *
    */
   int32_t m2;
   /**
-   * @brief Genneric int32
+   * @brief Generic int32
    *
    */
   int32_t m3;
   /**
-   * @brief Genneric int32
+   * @brief Generic int32
    *
    */
   int32_t m4;
   /**
-   * @brief Genneric int32
+   * @brief Generic int32
    *
    */
   int32_t m5;
   /**
-   * @brief Genneric int32
+   * @brief Generic int32
    *
    */
   int32_t m6;
   /**
-   * @brief Genneric int32
+   * @brief Generic int32
    *
    */
   int32_t m7;
   /**
-   * @brief Genneric int32
+   * @brief Generic int32
    *
    */
   int32_t m8;
 
 } PULSE;
 /**
- * @brief Force Sensor data strcuture
+ * @brief Force Sensor data structure
  *
  */
 typedef struct

@@ -123,8 +123,8 @@ controller_interface::return_type MelfaMonController::update(const rclcpp::Time&
                         GpioIdentifier identifier,
                         rclcpp::Publisher<melfa_mon_msgs::msg::GpioState>::SharedPtr& gpio_msg_publisher_) {
     gpio_msg.interface_name = io_interface_name;
-    gpio_msg.input_addrr = static_cast<uint16_t>(state_interfaces_.at(identifier).get_value());
-    gpio_msg.output_addrr = static_cast<uint16_t>(state_interfaces_.at(identifier + 1).get_value());
+    gpio_msg.input_addr = static_cast<uint16_t>(state_interfaces_.at(identifier).get_value());
+    gpio_msg.output_addr = static_cast<uint16_t>(state_interfaces_.at(identifier + 1).get_value());
     gpio_msg.input_data = static_cast<uint32_t>(state_interfaces_.at(identifier + 2).get_value());
     gpio_msg.output_data = static_cast<uint32_t>(state_interfaces_.at(identifier + 3).get_value());
     gpio_msg_publisher_->publish(gpio_msg);
@@ -290,57 +290,57 @@ bool MelfaMonController::configGpio(melfa_mon_msgs::srv::GpioConfigure::Request:
                        GpioIdentifier identifier) {
     res->success = true;
 
-    command_interfaces_[identifier].set_value(static_cast<double>(req->input_addrr));
-    command_interfaces_[identifier + 1].set_value(static_cast<double>(req->output_addrr));
+    command_interfaces_[identifier].set_value(static_cast<double>(req->input_addr));
+    command_interfaces_[identifier + 1].set_value(static_cast<double>(req->output_addr));
   };
 
-  if ((req->input_addrr >= ctrl_limits[0] && req->input_addrr <= ctrl_limits[1]) &&
-      (req->output_addrr >= ctrl_limits[0] && req->output_addrr <= ctrl_limits[1]))
+  if ((req->input_addr >= ctrl_limits[0] && req->input_addr <= ctrl_limits[1]) &&
+      (req->output_addr >= ctrl_limits[0] && req->output_addr <= ctrl_limits[1]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::general1_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[2] && req->input_addrr <= ctrl_limits[3]) &&
-           (req->output_addrr >= ctrl_limits[2] && req->output_addrr <= ctrl_limits[3]))
+  else if ((req->input_addr >= ctrl_limits[2] && req->input_addr <= ctrl_limits[3]) &&
+           (req->output_addr >= ctrl_limits[2] && req->output_addr <= ctrl_limits[3]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::general2_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[4] && req->input_addrr <= ctrl_limits[5]) &&
-           (req->output_addrr >= ctrl_limits[4] && req->output_addrr <= ctrl_limits[5]))
+  else if ((req->input_addr >= ctrl_limits[4] && req->input_addr <= ctrl_limits[5]) &&
+           (req->output_addr >= ctrl_limits[4] && req->output_addr <= ctrl_limits[5]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::user1_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[6] && req->input_addrr <= ctrl_limits[7]) &&
-           (req->output_addrr >= ctrl_limits[6] && req->output_addrr <= ctrl_limits[7]))
+  else if ((req->input_addr >= ctrl_limits[6] && req->input_addr <= ctrl_limits[7]) &&
+           (req->output_addr >= ctrl_limits[6] && req->output_addr <= ctrl_limits[7]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::user2_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[8] && req->input_addrr <= ctrl_limits[9]) &&
-           (req->output_addrr >= ctrl_limits[8] && req->output_addrr <= ctrl_limits[9]))
+  else if ((req->input_addr >= ctrl_limits[8] && req->input_addr <= ctrl_limits[9]) &&
+           (req->output_addr >= ctrl_limits[8] && req->output_addr <= ctrl_limits[9]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::user3_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[10] && req->input_addrr <= ctrl_limits[11]) &&
-           (req->output_addrr >= ctrl_limits[10] && req->output_addrr <= ctrl_limits[11]))
+  else if ((req->input_addr >= ctrl_limits[10] && req->input_addr <= ctrl_limits[11]) &&
+           (req->output_addr >= ctrl_limits[10] && req->output_addr <= ctrl_limits[11]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::user4_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[12] && req->input_addrr <= ctrl_limits[13]) &&
-           (req->output_addrr >= ctrl_limits[12] && req->output_addrr <= ctrl_limits[13]))
+  else if ((req->input_addr >= ctrl_limits[12] && req->input_addr <= ctrl_limits[13]) &&
+           (req->output_addr >= ctrl_limits[12] && req->output_addr <= ctrl_limits[13]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::user5_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[14] && req->input_addrr <= ctrl_limits[15]) &&
-           (req->output_addrr >= ctrl_limits[14] && req->output_addrr <= ctrl_limits[15]))
+  else if ((req->input_addr >= ctrl_limits[14] && req->input_addr <= ctrl_limits[15]) &&
+           (req->output_addr >= ctrl_limits[14] && req->output_addr <= ctrl_limits[15]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::user6_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[16] && req->input_addrr <= ctrl_limits[17]) &&
-           (req->output_addrr >= ctrl_limits[16] && req->output_addrr <= ctrl_limits[17]))
+  else if ((req->input_addr >= ctrl_limits[16] && req->input_addr <= ctrl_limits[17]) &&
+           (req->output_addr >= ctrl_limits[16] && req->output_addr <= ctrl_limits[17]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::user7_io_command);
   }
-  else if ((req->input_addrr >= ctrl_limits[18] && req->input_addrr <= ctrl_limits[19]) &&
-           (req->output_addrr >= ctrl_limits[18] && req->output_addrr <= ctrl_limits[19]))
+  else if ((req->input_addr >= ctrl_limits[18] && req->input_addr <= ctrl_limits[19]) &&
+           (req->output_addr >= ctrl_limits[18] && req->output_addr <= ctrl_limits[19]))
   {
     processIO(command_interfaces_, req, GpioIdentifier::user8_io_command);
   }
@@ -349,7 +349,7 @@ bool MelfaMonController::configGpio(melfa_mon_msgs::srv::GpioConfigure::Request:
     RCLCPP_WARN(get_node()->get_logger(),
                 "configure_gpio service: INVALID ADDRESS (%d) (%d)"
                 "Please select memory addresses that are within acceptable range of the SAME interface",
-                req->input_addrr, req->output_addrr);
+                req->input_addr, req->output_addr);
   }
 
   return res->success;
@@ -366,57 +366,57 @@ void MelfaMonController::commandGPIOCallback(const melfa_mon_msgs::msg::GpioComm
    */
 
   auto commandGPIO = [&](GpioIdentifier identifier) {
-    command_interfaces_[identifier].set_value(static_cast<double>(io_cmd_->input_addrr));
-    command_interfaces_[identifier + 1].set_value(static_cast<double>(io_cmd_->output_addrr));
+    command_interfaces_[identifier].set_value(static_cast<double>(io_cmd_->input_addr));
+    command_interfaces_[identifier + 1].set_value(static_cast<double>(io_cmd_->output_addr));
   };
 
-  if ((io_cmd_->input_addrr >= ctrl_limits[0] && io_cmd_->input_addrr <= ctrl_limits[1]) &&
-      (io_cmd_->output_addrr >= ctrl_limits[0] && io_cmd_->output_addrr <= ctrl_limits[1]))
+  if ((io_cmd_->input_addr >= ctrl_limits[0] && io_cmd_->input_addr <= ctrl_limits[1]) &&
+      (io_cmd_->output_addr >= ctrl_limits[0] && io_cmd_->output_addr <= ctrl_limits[1]))
   {
     commandGPIO(GpioIdentifier::general1_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[2] && io_cmd_->input_addrr <= ctrl_limits[3]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[2] && io_cmd_->output_addrr <= ctrl_limits[3]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[2] && io_cmd_->input_addr <= ctrl_limits[3]) &&
+           (io_cmd_->output_addr >= ctrl_limits[2] && io_cmd_->output_addr <= ctrl_limits[3]))
   {
     commandGPIO(GpioIdentifier::general2_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[4] && io_cmd_->input_addrr <= ctrl_limits[5]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[4] && io_cmd_->output_addrr <= ctrl_limits[5]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[4] && io_cmd_->input_addr <= ctrl_limits[5]) &&
+           (io_cmd_->output_addr >= ctrl_limits[4] && io_cmd_->output_addr <= ctrl_limits[5]))
   {
     commandGPIO(GpioIdentifier::user1_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[6] && io_cmd_->input_addrr <= ctrl_limits[7]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[6] && io_cmd_->output_addrr <= ctrl_limits[7]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[6] && io_cmd_->input_addr <= ctrl_limits[7]) &&
+           (io_cmd_->output_addr >= ctrl_limits[6] && io_cmd_->output_addr <= ctrl_limits[7]))
   {
     commandGPIO(GpioIdentifier::user2_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[8] && io_cmd_->input_addrr <= ctrl_limits[9]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[8] && io_cmd_->output_addrr <= ctrl_limits[9]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[8] && io_cmd_->input_addr <= ctrl_limits[9]) &&
+           (io_cmd_->output_addr >= ctrl_limits[8] && io_cmd_->output_addr <= ctrl_limits[9]))
   {
     commandGPIO(GpioIdentifier::user3_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[10] && io_cmd_->input_addrr <= ctrl_limits[11]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[10] && io_cmd_->output_addrr <= ctrl_limits[11]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[10] && io_cmd_->input_addr <= ctrl_limits[11]) &&
+           (io_cmd_->output_addr >= ctrl_limits[10] && io_cmd_->output_addr <= ctrl_limits[11]))
   {
     commandGPIO(GpioIdentifier::user4_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[12] && io_cmd_->input_addrr <= ctrl_limits[13]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[12] && io_cmd_->output_addrr <= ctrl_limits[13]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[12] && io_cmd_->input_addr <= ctrl_limits[13]) &&
+           (io_cmd_->output_addr >= ctrl_limits[12] && io_cmd_->output_addr <= ctrl_limits[13]))
   {
     commandGPIO(GpioIdentifier::user5_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[14] && io_cmd_->input_addrr <= ctrl_limits[15]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[14] && io_cmd_->output_addrr <= ctrl_limits[15]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[14] && io_cmd_->input_addr <= ctrl_limits[15]) &&
+           (io_cmd_->output_addr >= ctrl_limits[14] && io_cmd_->output_addr <= ctrl_limits[15]))
   {
     commandGPIO(GpioIdentifier::user6_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[16] && io_cmd_->input_addrr <= ctrl_limits[17]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[16] && io_cmd_->output_addrr <= ctrl_limits[17]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[16] && io_cmd_->input_addr <= ctrl_limits[17]) &&
+           (io_cmd_->output_addr >= ctrl_limits[16] && io_cmd_->output_addr <= ctrl_limits[17]))
   {
     commandGPIO(GpioIdentifier::user7_io_command);
   }
-  else if ((io_cmd_->input_addrr >= ctrl_limits[18] && io_cmd_->input_addrr <= ctrl_limits[19]) &&
-           (io_cmd_->output_addrr >= ctrl_limits[18] && io_cmd_->output_addrr <= ctrl_limits[19]))
+  else if ((io_cmd_->input_addr >= ctrl_limits[18] && io_cmd_->input_addr <= ctrl_limits[19]) &&
+           (io_cmd_->output_addr >= ctrl_limits[18] && io_cmd_->output_addr <= ctrl_limits[19]))
   {
     commandGPIO(GpioIdentifier::user8_io_command);
   }
@@ -425,7 +425,7 @@ void MelfaMonController::commandGPIOCallback(const melfa_mon_msgs::msg::GpioComm
     RCLCPP_WARN(get_node()->get_logger(),
                 "command GPIO Callback: INVALID ADDRESS (%d) (%d)"
                 "Please select memory addresses that are within acceptable range of the SAME interface",
-                io_cmd_->input_addrr, io_cmd_->output_addrr);
+                io_cmd_->input_addr, io_cmd_->output_addr);
   }
 }
 

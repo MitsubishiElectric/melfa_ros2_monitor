@@ -13,6 +13,6 @@
 #    limitations under the License.
 
 # Input Address
-uint16 input_addrr
+uint16 input_addr
 # Output Address
-uint16 output_addrr
+uint16 output_addr

@@ -1,33 +1,33 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rc1">
 
-    <!-- Enable setting arguments from the launch file -->
-    <xacro:arg name="robot_model" default="" />
-    <xacro:arg name="prefix" default="" />
-    <xacro:arg name="robot_ip" default="192.168.0.20" />
-    <xacro:arg name="send_port" default="12000" />
-    <xacro:arg name="recv_port" default="12001" />
-    <xacro:arg name="controller_type" default="" />
-    <xacro:arg name="controller_config" default="custom_monitor_params.yaml" />
-    <xacro:arg name="packet_lost_log" default="1" />
-    <xacro:arg name="joint_broadcaster" default="true" />
-    <xacro:arg name="scara" default="0" />
+  <!-- Enable setting arguments from the launch file -->
+  <xacro:arg name="robot_model" default="" />
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="robot_ip" default="192.168.0.20" />
+  <xacro:arg name="send_port" default="12000" />
+  <xacro:arg name="recv_port" default="12001" />
+  <xacro:arg name="controller_type" default="" />
+  <xacro:arg name="controller_config" default="custom_monitor_params.yaml" />
+  <xacro:arg name="packet_lost_log" default="1" />
+  <xacro:arg name="joint_broadcaster" default="true" />
+  <xacro:arg name="scara" default="0" />
 
-    <!-- Import ros2_control description -->
-    <xacro:include filename="$(find melfa_mon_description)/ros2_control/monitor.hardware.xacro" />
+  <!-- Import ros2_control description -->
+  <xacro:include filename="$(find melfa_mon_description)/ros2_control/monitor.hardware.xacro" />
 
-    <xacro:monitor_hardware
-        name="$(arg robot_model)" 
-        prefix="$(arg prefix)"
-        robot_model="$(arg robot_model)" 
-        scara="$(arg scara)" 
-        robot_ip="$(arg robot_ip)" 
-        send_port="$(arg send_port)"
-        recv_port="$(arg recv_port)"
-        controller_config="$(arg controller_config)"
-        controller_type="$(arg controller_type)"
-        packet_lost_log="$(arg packet_lost_log)"
-        joint_broadcaster="$(arg joint_broadcaster)"
-        />
+  <xacro:monitor_hardware
+    name="$(arg robot_model)"
+    prefix="$(arg prefix)"
+    robot_model="$(arg robot_model)"
+    scara="$(arg scara)"
+    robot_ip="$(arg robot_ip)"
+    send_port="$(arg send_port)"
+    recv_port="$(arg recv_port)"
+    controller_config="$(arg controller_config)"
+    controller_type="$(arg controller_type)"
+    packet_lost_log="$(arg packet_lost_log)"
+    joint_broadcaster="$(arg joint_broadcaster)"
+  />
 
 </robot>

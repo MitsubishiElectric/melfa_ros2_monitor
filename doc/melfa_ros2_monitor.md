@@ -115,15 +115,15 @@ The MELFA ROS2 Monitor supports monitoring **up to 4 types of robot data at the 
 
 The monitored data types can be divided into the following categories:
 
-| Data Type                                                       | Topic Name                              | Description                                                         | MELFA Data ID |
-| --------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------- | ------------- |
-| XYZ position (Feedback) *Angle in radians                       | `/tcp_pose_broadcastor`                 | Position of the robot's EEF,TCP pose (XYZ + orientation)            | 7             |
-| Joint position (Feedback) *Angle in radians                     | `/joint_states`                         | Joint Angle for joint1 up to joint8                                 | 8             |
-| Speed (Feedback) [rpm]                                          | `/joint_states`velocity field           | Rotational speed of joints                                          | 15            |
-| Force sensor current position xyz[N]abc[Nm]                     | `/fts_curr_broadcaster/wrench`          | Force sensor's data, before offset.                                 | 101           |
-| Force sensor original data (after offset cancel) xyz[N]abc[Nm]  | `/fts_after_offset_broadcastor/wrench`  | Force sensor data, for most of use case, this will suffice.         | 102           |
-| Force sensor original data (before offset cancel) xyz[N]abc[Nm] | `/fts_before_offset_broadcaster/wrench` | Force sensor data used for force sensor debugging                   | 103           |
-| Servo Current Feed back                                         | `/joint_states`effort field             | The data is being put into the `Effort` field in the `joint_state`. | 1011          |
+| Data Type                                         | Unit             | Topic Name                                             | Description                                                         | MELFA Data ID |
+| ------------------------------------------------- | ---------------- | ------------------------------------------------------ | ------------------------------------------------------------------- | ------------- |
+| XYZ position (Feedback)                           | xyz: m, abc: rad | `/tcp_pose_broadcaster/pose`                           | Position of the robot's EEF,TCP pose (XYZ + orientation)            | 7             |
+| Joint position (Feedback)                         | rad              | `/joint_state_broadcaster/joint_states` position field | Joint Angle for joint1 up to joint8                                 | 8             |
+| Speed (Feedback)                                  | rpm              | `/joint_state_broadcaster/joint_states` velocity field | Rotational speed of joints                                          | 15            |
+| Force sensor current data                         | xyz: N, abc: Nm  | `/fts_curr_broadcaster/wrench`                         | Force sensor's data, before offset.                                 | 101           |
+| Force sensor original data (after offset cancel)  | xyz: N, abc: Nm  | `/fts_after_offset_broadcaster/wrench`                 | Force sensor data, for most of use case, this will suffice.         | 102           |
+| Force sensor original data (before offset cancel) | xyz: N, abc: Nm  | `/fts_before_offset_broadcaster/wrench`                | Force sensor data used for force sensor debugging                   | 103           |
+| Servo current (Feedback)                          | Arms             | `/joint_state_broadcaster/joint_states` effort field   | The data is being put into the `Effort` field in the `joint_state`. | 1011          |
 
 ### 3.1 How to configure types of robot data to monitor
 
@@ -172,7 +172,7 @@ In this demo, we will be showing some basic operation with io_controls, includin
     ```bash
     # Terminal 1
 
-    ros2 launch melfa_mon_bringup monitor_control.launch.py use_fake_hardware:=false controller_type:="R" robot_ip:=192.168.3.100
+    ros2 launch melfa_mon_bringup monitor_control.launch.py controller_type:="R" robot_ip:=192.168.3.100
     ```
 
 2. For __viewing the enabled I/O interfaces__.
@@ -237,8 +237,8 @@ There are 8 user I/O interfaces in MELFA ROS2 Monitor, user can map them to GPIO
 
     ---
     interface_name: User1 IO State
-    input_addrr: 11024
-    output_addrr: 11024
+    input_addr: 11024
+    output_addr: 11024
     input_data: 0
     output_data: 0
     ---
@@ -249,22 +249,22 @@ There are 8 user I/O interfaces in MELFA ROS2 Monitor, user can map them to GPIO
     ```bash
     # Terminal 2
 
-    ros2 service call /io_mon_controller/configure_io_monitor_address melfa_mon_msgs/srv/GpioConfigure "{input_addrr: 11025, output_addrr: 11025}"
+    ros2 service call /io_mon_controller/configure_io_monitor_address melfa_mon_msgs/srv/GpioConfigure "{input_addr: 11025, output_addr: 11025}"
     ```
     The ROS 2 service format is as below:
 
     ```
     # Fields Required
-    uint16 input_addrr
-    uint16 output_addrr
+    uint16 input_addr
+    uint16 output_addr
     ---
     bool success
     ```
 
-    | Parameter    | Description                 |
-    | ------------ | --------------------------- |
-    | input_addrr  | Address of first input bit  |
-    | output_addrr | Address of first output bit |
+    | Parameter   | Description                 |
+    | ----------- | --------------------------- |
+    | input_addr  | Address of first input bit  |
+    | output_addr | Address of first output bit |
 
 3. Run the command below to observe the changes.
     ```bash
@@ -278,8 +278,8 @@ There are 8 user I/O interfaces in MELFA ROS2 Monitor, user can map them to GPIO
 
     ---
     interface_name: User1 IO State
-    input_addrr: 11025
-    output_addrr: 11025
+    input_addr: 11025
+    output_addr: 11025
     input_data: 0
     output_data: 0
     ---
