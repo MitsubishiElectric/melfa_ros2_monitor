@@ -475,7 +475,7 @@ int rtmon::ReadFromRobot_FB_()
     case MON_TYP_FORCE_SENSOR_BEFORE_OFFSET:
       if (RT_API_DEBUG_MODE)
         std::cout << "Reading Force sensor original data before offset cancel\n";
-      fb_pack.fs_after = RTMONrecv.dat1.force;
+      fb_pack.fs_before = RTMONrecv.dat1.force;
       break;
     case MON_TYP_POSE_CMD_FOR_FORCE_SENSOR_CORRECTION:
       if (RT_API_DEBUG_MODE)
@@ -684,7 +684,7 @@ int rtmon::ReadFromRobot_FB_()
     case MON_TYP_FORCE_SENSOR_BEFORE_OFFSET:
       if (RT_API_DEBUG_MODE)
         std::cout << "Reading Force sensor original data before offset cancel\n";
-      fb_pack.fs_after = RTMONrecv.dat2.force;
+      fb_pack.fs_before = RTMONrecv.dat2.force;
       break;
     case MON_TYP_POSE_CMD_FOR_FORCE_SENSOR_CORRECTION:
       if (RT_API_DEBUG_MODE)
@@ -893,7 +893,7 @@ int rtmon::ReadFromRobot_FB_()
     case MON_TYP_FORCE_SENSOR_BEFORE_OFFSET:
       if (RT_API_DEBUG_MODE)
         std::cout << "Reading Force sensor original data before offset cancel\n";
-      fb_pack.fs_after = RTMONrecv.dat3.force;
+      fb_pack.fs_before = RTMONrecv.dat3.force;
       break;
     case MON_TYP_POSE_CMD_FOR_FORCE_SENSOR_CORRECTION:
       if (RT_API_DEBUG_MODE)
@@ -1102,7 +1102,7 @@ int rtmon::ReadFromRobot_FB_()
     case MON_TYP_FORCE_SENSOR_BEFORE_OFFSET:
       if (RT_API_DEBUG_MODE)
         std::cout << "Reading Force sensor original data before offset cancel\n";
-      fb_pack.fs_after = RTMONrecv.dat4.force;
+      fb_pack.fs_before = RTMONrecv.dat4.force;
       break;
     case MON_TYP_POSE_CMD_FOR_FORCE_SENSOR_CORRECTION:
       if (RT_API_DEBUG_MODE)

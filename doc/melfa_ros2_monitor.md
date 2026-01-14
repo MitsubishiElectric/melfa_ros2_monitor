@@ -115,15 +115,19 @@ The MELFA ROS2 Monitor supports monitoring **up to 4 types of robot data at the 
 
 The monitored data types can be divided into the following categories:
 
-| Data Type                                         | Unit             | Topic Name                                             | Description                                                         | MELFA Data ID |
-| ------------------------------------------------- | ---------------- | ------------------------------------------------------ | ------------------------------------------------------------------- | ------------- |
-| XYZ position (Feedback)                           | xyz: m, abc: rad | `/tcp_pose_broadcaster/pose`                           | Position of the robot's EEF,TCP pose (XYZ + orientation)            | 7             |
-| Joint position (Feedback)                         | rad              | `/joint_state_broadcaster/joint_states` position field | Joint Angle for joint1 up to joint8                                 | 8             |
-| Speed (Feedback)                                  | rpm              | `/joint_state_broadcaster/joint_states` velocity field | Rotational speed of joints                                          | 15            |
-| Force sensor current data                         | xyz: N, abc: Nm  | `/fts_curr_broadcaster/wrench`                         | Force sensor's data, before offset.                                 | 101           |
-| Force sensor original data (after offset cancel)  | xyz: N, abc: Nm  | `/fts_after_offset_broadcaster/wrench`                 | Force sensor data, for most of use case, this will suffice.         | 102           |
-| Force sensor original data (before offset cancel) | xyz: N, abc: Nm  | `/fts_before_offset_broadcaster/wrench`                | Force sensor data used for force sensor debugging                   | 103           |
-| Servo current (Feedback)                          | Arms             | `/joint_state_broadcaster/joint_states` effort field   | The data is being put into the `Effort` field in the `joint_state`. | 1011          |
+| Data Type                                         | Unit              | Topic Name                                               | Description                                                                 | MELFA Data ID |
+|--------------------------------------------------|-------------------|----------------------------------------------------------|-----------------------------------------------------------------------------|---------------|
+| XYZ position                            | xyz: m, xyzw: quarternion  | `/tcp_pose_broadcaster/pose`                             | Position of the robot's EEF, TCP pose (XYZ + orientation)                   | 7             |
+| Joint position                         | rad               | `/joint_state_broadcaster/joint_states` position field   | Joint angle for joint1 up to joint8                                         | 8             |
+| Speed                                  | rpm               | `/joint_state_broadcaster/joint_states` velocity field   | Rotational speed of joints                                                  | 15            |
+| Force sensor current data                         | xyz: N, abc: Nm   | `/fts_curr_broadcaster/wrench`                           | Force sensor data before offset                                             | 101           |
+| Force sensor original data (after offset cancel)  | xyz: N, abc: Nm   | `/fts_after_offset_broadcaster/wrench`                   | Force sensor data after offset cancel (main use case)                       | 102           |
+| Force sensor original data (before offset cancel) | xyz: N, abc: Nm   | `/fts_before_offset_broadcaster/wrench`                  | Force sensor raw data for debugging                                         | 103           |
+| Servo current (Feedback)                          | A_rms              | `/joint_state_broadcaster/joint_states` effort field     | Servo current stored in `effort` field of `JointState`                      | 1011          |
+| Encoder temperature                               | °C                | `/motor_state_broadcaster/joint_states` velocity field   | Encoder temperature for each motor                                          | 9             |
+| Encoder miscount                                  | count             | `/motor_state_broadcaster/joint_states` position field   | Encoder miscount value for motor diagnostics                                | 10            |
+| Motor power supply voltage                        | V                 | `/motor_state_broadcaster/joint_states` effort field     | Motor power supply voltage                                                  | 11            |
+
 
 ### 3.1 How to configure types of robot data to monitor
 
