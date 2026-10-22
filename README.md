@@ -108,6 +108,6 @@ After installation, proceed with the RT ToolBox3 setup guides depending on your 
 <div> </div>
 
 ## __5. Contact us / Technical support__
-More Support & Service, please contact us on [MELCO](https://www.mitsubishielectric.co.jp/fa/products/rbt/robot/ex/openplatform/index.html). For contributing and reporting, refer to [this](./CONTRIBUTING.md) for development related enquiries.
+More Support & Service, please contact us on [Mitsubishi Electric](https://www.mitsubishielectric.co.jp/fa/products/rbt/robot/ex/openplatform/index.html). For contributing and reporting, refer to [this](./CONTRIBUTING.md) for development related enquiries.
 
 <div> </div>
